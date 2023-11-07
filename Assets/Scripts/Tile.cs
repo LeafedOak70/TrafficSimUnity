@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : MonoBehaviour{
-    public enum TerrainType { None, SPlus, SMinus, Road, Building };
+    public enum TerrainType { None, Grass, Road, Building };
     public List<Tile> upNeighbours;
     public List<Tile> downNeighbours;
     public List<Tile> leftNeighbours;

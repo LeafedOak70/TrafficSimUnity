@@ -123,7 +123,7 @@ MonoBehaviour:
   - {fileID: 4823604499984981385, guid: 08d8e271d25612a49a6c8d59c78837ff, type: 3}
   - {fileID: 94826980520163380, guid: e5d759ce5be6ef942918daaf24413e0f, type: 3}
   - {fileID: 965316944881665988, guid: bbf9ea7aa6895214c933de0558ac0caf, type: 3}
-  north: 1
-  south: 0
-  east: 0
-  west: 1
+  north: 2
+  south: 1
+  east: 1
+  west: 2
