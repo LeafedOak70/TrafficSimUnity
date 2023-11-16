@@ -189,6 +189,55 @@ MonoBehaviour:
   gridComponents: []
   cellObj: {fileID: 6604351160826802426, guid: 6bff73690a049c840ba416dcc6aca4ef, type: 3}
   emergencyTile: {fileID: -203790054657018051, guid: d5f0d0aa3ade14344893beddcc4e5ecb, type: 3}
+--- !u!1 &26255828
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 26255830}
+  - component: {fileID: 26255829}
+  m_Layer: 0
+  m_Name: MapGen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &26255829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26255828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c3071d0d602553449aab38a04a40129, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  perlinClass: {fileID: 986128391}
+  downtownPrefab: {fileID: 1792700600623690856, guid: 3103c106fe2b75a4db9b45059b8504b4, type: 3}
+  urbanPrefab: {fileID: 4254855067235756125, guid: e32321276dbc44c4da4083b48bd17ac7, type: 3}
+  ruralPrefab: {fileID: 3057397679390664765, guid: a04904cec8302754b9863a3df834baee, type: 3}
+  villagePrefab: {fileID: 5226220910112820066, guid: 7c19bd57ff67d0d40a3deb39aee5a34b, type: 3}
+--- !u!4 &26255830
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26255828}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -55.438614, y: -45.900063, z: -0.0029443179}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,7 +431,7 @@ Transform:
   m_GameObject: {fileID: 986128390}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 288.3, y: 23.8, z: 0}
   m_LocalScale: {x: 128, y: 128, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -461,3 +510,4 @@ SceneRoots:
   - {fileID: 16617966}
   - {fileID: 2002343907}
   - {fileID: 986128394}
+  - {fileID: 26255830}
