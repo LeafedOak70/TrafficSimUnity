@@ -23,5 +23,4 @@ public class Cell : MonoBehaviour
         tileOptions = tiles;
     }
     
-
 }
