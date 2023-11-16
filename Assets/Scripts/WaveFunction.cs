@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class WaveFunction : MonoBehaviour
@@ -14,7 +13,6 @@ public class WaveFunction : MonoBehaviour
     public Tile emergencyTile;
 
     int iterations = 0;
-
     void Awake()
     {
         gridComponents = new List<Cell>();
