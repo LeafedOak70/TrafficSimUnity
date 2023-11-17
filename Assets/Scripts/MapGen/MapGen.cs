@@ -48,6 +48,8 @@ public class MapGen : MonoBehaviour
         if(mapTileData[x,y].visited ||mapTileData[x,y].districtType != district){
             return;
         }
+        //Debug.Log($"FloodFill: x={x}, y={y}, districtID={districtID}, district={district}");
+
         mapTileData[x,y].visited = true;
         districtList[districtID].tileArray.Add(mapTileData[x,y]);
         FloodFill(x+1,y,districtID,mapTileData[x,y].districtType);
@@ -59,10 +61,11 @@ public class MapGen : MonoBehaviour
         if(generateFromDistricts){
             foreach (District district in districtList)
             {
-                GameObject prefabToInstantiate = GetPrefabForTile(district.districtType);
+                
 
                 foreach (Tile tile in district.tileArray)
                 {
+                    GameObject prefabToInstantiate = GetPrefabForTile(tile.districtType);
                     Instantiate(prefabToInstantiate, new Vector3(tile.x, tile.y, 0), Quaternion.identity);
                 }
             }
