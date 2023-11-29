@@ -7,6 +7,7 @@ public class District{
 
     public List<Tile> tileArray;
     public DistrictType districtType;
+    
 
     public District(){
         tileArray = new List<Tile>();
