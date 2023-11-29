@@ -33,15 +33,7 @@ public class MapGen : MonoBehaviour
         ConvertFromPerlin(perlinMap);
         removeStraggler();//removes little one tile pokey in things
         IdentifyDistricts();
-        Vector2U test = new Vector2U(0,-1);
-        // Debug.Log($"Testing vector going x : {test.x}, y: {test.y}");
-        Vector2U test2 = getVector(test,1);
-        // Debug.Log($"Got back vector going x : {test.x}, y: {test.y}");
-        // Debug.Log($"Looping through scanned districts there is : {districtList.Count}");
-        // foreach(District district in districtList){
-        //     Debug.Log($"District id : {district.id} : type is : ${district.districtType}");
-        // }
-        //GenerateRoadOutlines();
+        GenerateRoadOutlines();
         GenerateRoadWithinDistricts();
         setRoadNeighbours();
         

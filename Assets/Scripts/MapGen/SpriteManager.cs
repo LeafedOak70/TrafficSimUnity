@@ -65,6 +65,8 @@ public class SpriteManager : MonoBehaviour{
             spriteRenderer.sprite = veriRoad;
         }else if(tile.east == TileType.Road &&tile.west == TileType.Road && tile.north != TileType.Road &&tile.south != TileType.Road){
             spriteRenderer.sprite = horiRoad;
+        }else if(tile.east != TileType.Road &&tile.west != TileType.Road && tile.north != TileType.Road &&tile.south != TileType.Road){
+            tile.tiletype = TileType.Building;
         }
     }
 
