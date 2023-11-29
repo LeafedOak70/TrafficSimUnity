@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7a22a82cb7e5cec48815aa163829d19d
+guid: 1c4da086dbd3dce4e888b31d545d02e2
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,7 +123,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: raods_0
+      name: betterBiru_0
       rect:
         serializedVersion: 2
         x: 0
@@ -137,14 +137,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c9e5a03de036ad64ebe0e3c4f74bb1b1
-      internalID: -1942954101
+      spriteID: 6db85ce6aea1e884a82d101f0dc7a1f5
+      internalID: -961847930
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: raods_1
+      name: betterBiru_1
       rect:
         serializedVersion: 2
         x: 16
@@ -158,14 +158,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fd343916b30b6994cbc003b04d5e5c80
-      internalID: 1084094256
+      spriteID: dedf6b0128d9b534c89e9c95226a7509
+      internalID: -668435451
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: raods_2
+      name: betterBiru_2
       rect:
         serializedVersion: 2
         x: 32
@@ -179,14 +179,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9399906ee90f69e418b9bc26b51f2c45
-      internalID: 65029885
+      spriteID: 6c6702e8b796a3840b4a35821be27dbe
+      internalID: -122515716
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: raods_3
+      name: betterBiru_3
       rect:
         serializedVersion: 2
         x: 48
@@ -200,14 +200,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 69349d7019335614789f2a0fabd3153b
-      internalID: -103498674
+      spriteID: 17871a2d15c81bd408fd286fed19357e
+      internalID: -897414638
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: raods_4
+      name: betterBiru_4
       rect:
         serializedVersion: 2
         x: 64
@@ -221,14 +221,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 83ad4788e528b3a4381dc9594f1a1052
-      internalID: -1191381347
+      spriteID: 7b93a2ee7ee35184e8cb2419ddc54a01
+      internalID: 2110271191
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: raods_5
+      name: betterBiru_5
       rect:
         serializedVersion: 2
         x: 80
@@ -242,8 +242,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a6ce069de8b5f7e489f151738202ab4a
-      internalID: -636612036
+      spriteID: a111a71f5a7a96443988a9ee641cf112
+      internalID: -1289508354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: betterBiru_6
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca6d6d5625a54ce44b8140143fed7b43
+      internalID: -1261806391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: betterBiru_7
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d32531216678334ba6b03d96962bc34
+      internalID: -1115911065
       vertices: []
       indices: 
       edges: []
@@ -259,12 +301,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      raods_0: -1942954101
-      raods_1: 1084094256
-      raods_2: 65029885
-      raods_3: -103498674
-      raods_4: -1191381347
-      raods_5: -636612036
+      betterBiru_0: -961847930
+      betterBiru_1: -668435451
+      betterBiru_2: -122515716
+      betterBiru_3: -897414638
+      betterBiru_4: 2110271191
+      betterBiru_5: -1289508354
+      betterBiru_6: -1261806391
+      betterBiru_7: -1115911065
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

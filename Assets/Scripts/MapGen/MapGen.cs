@@ -44,8 +44,13 @@ public class MapGen : MonoBehaviour
         foreach(GameObject gameObject in instantiatedTiles){
             Tile tile = gameObject.GetComponent<Tile>();
             SpriteRenderer sprite = gameObject.GetComponent<SpriteRenderer>();
+            int sortingOrder = Mathf.RoundToInt(transform.position.y * 100f);
+            sprite.sortingOrder = sortingOrder;
             if(tile.tiletype == TileType.Road){
                 spriteManager.getRoadSprite(tile, sprite);
+            }
+            if(tile.tiletype == TileType.Building){
+                spriteManager.getBiruSprite(tile, sprite);
             }
 
         }

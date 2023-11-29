@@ -405,12 +405,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a59226ecc97efe4459c09ae7cb08b665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horiRoad: {fileID: -56019573, guid: 7a22a82cb7e5cec48815aa163829d19d, type: 3}
-  veriRoad: {fileID: 531289867, guid: 7a22a82cb7e5cec48815aa163829d19d, type: 3}
-  fourRoad: {fileID: 2057274521, guid: 7a22a82cb7e5cec48815aa163829d19d, type: 3}
-  tRoad: {fileID: 1905613896, guid: 7a22a82cb7e5cec48815aa163829d19d, type: 3}
-  lRoad: {fileID: 194999681, guid: 7a22a82cb7e5cec48815aa163829d19d, type: 3}
-  roadEnd: {fileID: 21300000, guid: d115063fedde14146ae1b0ffe79e40f4, type: 3}
+  horiRoad: {fileID: -1942954101, guid: 7a22a82cb7e5cec48815aa163829d19d, type: 3}
+  veriRoad: {fileID: 1084094256, guid: 7a22a82cb7e5cec48815aa163829d19d, type: 3}
+  fourRoad: {fileID: -103498674, guid: 7a22a82cb7e5cec48815aa163829d19d, type: 3}
+  tRoad: {fileID: 65029885, guid: 7a22a82cb7e5cec48815aa163829d19d, type: 3}
+  lRoad: {fileID: -1191381347, guid: 7a22a82cb7e5cec48815aa163829d19d, type: 3}
+  roadEnd: {fileID: -636612036, guid: 7a22a82cb7e5cec48815aa163829d19d, type: 3}
+  biru:
+  - {fileID: -961847930, guid: 1c4da086dbd3dce4e888b31d545d02e2, type: 3}
+  - {fileID: -668435451, guid: 1c4da086dbd3dce4e888b31d545d02e2, type: 3}
+  - {fileID: -122515716, guid: 1c4da086dbd3dce4e888b31d545d02e2, type: 3}
+  - {fileID: -897414638, guid: 1c4da086dbd3dce4e888b31d545d02e2, type: 3}
+  - {fileID: 2110271191, guid: 1c4da086dbd3dce4e888b31d545d02e2, type: 3}
+  - {fileID: -1289508354, guid: 1c4da086dbd3dce4e888b31d545d02e2, type: 3}
+  - {fileID: -1261806391, guid: 1c4da086dbd3dce4e888b31d545d02e2, type: 3}
+  - {fileID: -1115911065, guid: 1c4da086dbd3dce4e888b31d545d02e2, type: 3}
   errorSprite: {fileID: 21300000, guid: 361577a5f3b1bd94ea2812533bb321b4, type: 3}
 --- !u!4 &2008378375
 Transform:

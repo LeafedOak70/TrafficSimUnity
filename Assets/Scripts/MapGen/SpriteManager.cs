@@ -6,6 +6,7 @@ using UnityEngine;
 using Vector2U =  UnityEngine.Vector2;
 using Vector3U =  UnityEngine.Vector3;
 using QuaternionU = UnityEngine.Quaternion;
+using RandomU = UnityEngine.Random;
 using System.Linq;
 using UnityEditor.PackageManager;
 
@@ -16,8 +17,15 @@ public class SpriteManager : MonoBehaviour{
     public Sprite tRoad;
     public Sprite lRoad;
     public Sprite roadEnd;
+    public Sprite[] biru;
     public Sprite errorSprite;
 
+
+    public void getBiruSprite(Tile tile, SpriteRenderer spriteRenderer){
+        
+        int randomBiru = RandomU.Range(0,biru.Length);
+        spriteRenderer.sprite = biru[randomBiru];
+    }
     public void getRoadSprite(Tile tile, SpriteRenderer spriteRenderer){
         //Four rotations of the T junction
         if(tile.east == TileType.Road &&tile.west == TileType.Road &&tile.south == TileType.Road && tile.north != TileType.Road ){
