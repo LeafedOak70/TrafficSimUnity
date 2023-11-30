@@ -10,36 +10,42 @@ using RandomU = UnityEngine.Random;
 using System.Linq;
 using UnityEditor.PackageManager;
 
-
 public class Controller : MonoBehaviour{
     public MapGen mapGen;
-    public SpriteManager spriteManager;
-    public Car car;
-    public PerlinNoiseGenerator perlinGen;
-
+    // public SpriteManager spriteManager;
+    // public Car car;
+    // public PerlinNoiseGenerator perlinGen;
+    
     public bool testBool;
     public int width = 128;
     public int height = 128;
     public int scale = 128;
+    public Tile[,] mapTileData;
 
 
     private void Start(){
-        mapGen.generateMap(width, height, scale);
+        mapTileData = new Tile[width, height];
+        mapGen.generateMap();
         test();
         //generateCars()
 
     }
-    private void Update(){
-        if(testBool){test();}
-    }
+    // private void Update(){
+    //     if(testBool){test();}
+    // }
     public void test(){
         foreach(Street street in mapGen.streetList){
             if(street.biruArray.Count < 10){return;}
             int rand1 = RandomU.Range(0,street.biruArray.Count);
             int rand2 = RandomU.Range(0,street.biruArray.Count);
-            if(getStreetTile(street.biruArray[rand1]) != null && getStreetTile(street.biruArray[rand2])){
+            if(getStreetTile(street.biruArray[rand1]) != null && getStreetTile(street.biruArray[rand2]) != null){
                 Tile streetTile1 = getStreetTile(street.biruArray[rand1]);
                 Tile streetTile2 = getStreetTile(street.biruArray[rand2]);
+                AStarPathFinder pathFinder = new AStarPathFinder(mapTileData, width, height);
+                List<Tile> path = pathFinder.FindPath(streetTile1,streetTile2);
+                if(path != null){Debug.Log("Found path between to tiles I think");}
+                else{Debug.Log("Actually it's null I think");}
+
             }else{Debug.Log($"Was null couldnt find street from building for street id {street.id}");}
             
             

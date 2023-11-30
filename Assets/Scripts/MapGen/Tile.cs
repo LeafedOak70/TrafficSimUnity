@@ -25,6 +25,9 @@ public class Tile : MonoBehaviour{
     public int id;
     public bool inStreet;
     public int streetId;
+    public float gScore;
+    public float hScore; 
+    public float fScore;
     //public RoadType roadType;
     public List<Vector3U> wayPoints;
     public Tile(){
@@ -57,6 +60,10 @@ public class Tile : MonoBehaviour{
         this.streetId = tile.streetId;
 
         this.wayPoints = tile.wayPoints;
+
+        this.fScore = tile.fScore;
+        this.gScore = tile.hScore;
+        this.gScore = tile.gScore;
     }
     public void copyTile(Tile tile){
         this.leftNeighbours = tile.leftNeighbours;

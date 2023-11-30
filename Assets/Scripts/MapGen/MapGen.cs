@@ -31,20 +31,28 @@ public class MapGen : MonoBehaviour
     public int height;
     public int scale;
 
-    public void generateMap(int w, int h, int s)
+    // private void Start(){
+    //     height = 128; width = 128; scale = 128;
+    //     generateMap();
+
+    // }
+
+    public void generateMap()
     {
-        width = w; height = h; scale = s;
+        width = 128; height = 128; scale = 128;
         dirArray = new int[,]{{-1,0},{0,1},{1,0},{0,-1}}; 
-        float[,] perlinMap = perlinClass.getPerlinMap(width, height, scale);
+        float[,] perlinMap = perlinClass.getPerlinMap();
         ConvertFromPerlin(perlinMap);
         removeStraggler();//removes little one tile pokey in things
         IdentifyDistricts();
         GenerateRoadOutlines();
         GenerateRoadWithinDistricts();
-        setRoadNeighbours();
         IdentifyStreets();
+        setRoadNeighbours();
+        
         GenerateDistrictTiles();//This merely generates the blurry outline of the city
         attachRoadSprites();
+        
     }
     void IdentifyStreets(){
         int streetId = 0;

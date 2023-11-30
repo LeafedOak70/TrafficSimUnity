@@ -260,8 +260,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGen: {fileID: 1266782119}
-  spriteManager: {fileID: 2008378374}
-  car: {fileID: 726758151}
+  testBool: 1
+  width: 128
+  height: 128
+  scale: 128
 --- !u!4 &219055349
 Transform:
   m_ObjectHideFlags: 0
@@ -509,6 +511,9 @@ MonoBehaviour:
   noroadPrefab: {fileID: 6817472133871644316, guid: 7cc18b480c9dbf54fabea6fbb8f07da7, type: 3}
   instantiatedTiles: []
   generateFromDistricts: 1
+  width: 0
+  height: 0
+  scale: 0
 --- !u!4 &1266782120
 Transform:
   m_ObjectHideFlags: 0
