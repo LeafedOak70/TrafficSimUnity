@@ -8,6 +8,7 @@ using Vector3U =  UnityEngine.Vector3;
 using QuaternionU = UnityEngine.Quaternion;
 using System.Linq;
 using UnityEditor.PackageManager;
+using Unity.Collections;
 
 public class MapGen : MonoBehaviour
 {
@@ -22,23 +23,75 @@ public class MapGen : MonoBehaviour
     public List<GameObject> instantiatedTiles = new List<GameObject>();
     //public GameObject roadPrefab;
     public List<District> districtList;
+    public List<Street> streetList;
     public Tile[,] mapTileData;//raw map data
     public bool generateFromDistricts;
     private int[,] dirArray;
+    public int width;
+    public int height;
+    public int scale;
 
-    private void Start()
+    public void generateMap(int w, int h, int s)
     {
+        width = w; height = h; scale = s;
         dirArray = new int[,]{{-1,0},{0,1},{1,0},{0,-1}}; 
-        float[,] perlinMap = perlinClass.getPerlinMap();
+        float[,] perlinMap = perlinClass.getPerlinMap(width, height, scale);
         ConvertFromPerlin(perlinMap);
         removeStraggler();//removes little one tile pokey in things
         IdentifyDistricts();
         GenerateRoadOutlines();
         GenerateRoadWithinDistricts();
         setRoadNeighbours();
-        
+        IdentifyStreets();
         GenerateDistrictTiles();//This merely generates the blurry outline of the city
         attachRoadSprites();
+    }
+    void IdentifyStreets(){
+        int streetId = 0;
+        streetList = new List<Street>();
+        foreach(Tile tile in mapTileData){
+            if(tile.tiletype == TileType.Road){
+                if(tile.inStreet == false){
+                    Street street = new Street();
+                    street.id = streetId;
+                    streetList.Add(street);
+                    FloodFillStreet(tile, streetId);
+                    streetId++;
+                }
+            }
+        }
+    }
+    void FloodFillStreet(Tile tile, int id){
+        if (tile.x < 0 || tile.x >= width || tile.y < 0 || tile.y >= height)
+        {
+            return;
+        }
+        if(tile.inStreet && tile.tiletype == TileType.Road){
+            return;
+        }
+        //Debug.Log($"FloodFill: x={x}, y={y}, districtID={districtID}, district={district}");
+
+        tile.inStreet = true;
+        tile.streetId = id;
+        streetList[id].streetArray.Add(tile);
+        //add heighbouring building
+        int[] neighbourX = {0,0,-1,1};
+        int[] neighbourY = {1,-1,0,0};
+        for( int i = 0; i < 4; i++){
+            int newX = tile.x + neighbourX[i];
+            int newY = tile.y + neighbourY[i];
+            //Debug.Log($"Neighbour tile x:{newX} - y:{newY}");
+            if (newX >= 0 && newX < width && newY >= 0 && newY < height){
+                if(mapTileData[newX,newY].tiletype == TileType.Road){
+                FloodFillStreet(mapTileData[newX,newY],id);
+                }else if(mapTileData[newX,newY].tiletype == TileType.Building){
+                    streetList[id].biruArray.Add(mapTileData[newX,newY]);
+                    mapTileData[newX,newY].streetId = id;
+                }
+            }
+            
+        }
+
     }
     void attachRoadSprites(){
         foreach(GameObject gameObject in instantiatedTiles){
@@ -61,7 +114,7 @@ public class MapGen : MonoBehaviour
                 for(int i = 0; i < 4; i++){
                     int newX = tile.x + dirArray[i,0];
                     int newY = tile.y + dirArray[i,1];
-                    if (newX < 0 || newX >= perlinClass.width || newY < 0 || newY >= perlinClass.height)
+                    if (newX < 0 || newX >= width || newY < 0 || newY >= height)
                     {}else{
                         if(i == 0){tile.west = mapTileData[newX,newY].tiletype;}
                         if(i == 1){tile.north = mapTileData[newX,newY].tiletype;}
@@ -97,7 +150,7 @@ public class MapGen : MonoBehaviour
         //check whether visiting tile is valid
         // Debug.Log($"x: {x}, y: {y}, timerL: {timerL}, timerR: {timerR}");
         // Debug.Log($"vec ATS TART: ({vector.x}, {vector.y})");
-        if (x < 1 || x > perlinClass.width-2 || y < 1 || y > perlinClass.height-2)
+        if (x < 1 || x > width-2 || y < 1 || y > height-2)
         {
             // Debug.Log($"x: {x}, OUT OF BOUNDS");
             return;
@@ -217,7 +270,7 @@ public class MapGen : MonoBehaviour
             for(int i = 0; i < 4;i++){
                 int nXcoord = tile.x + neighbourX[i];//Coords for neigbour
                 int nYcoord = tile.y + neighbourY[i];
-                if (nXcoord >= 0 && nXcoord < perlinClass.width && nYcoord >= 0 && nYcoord < perlinClass.height){
+                if (nXcoord >= 0 && nXcoord < width && nYcoord >= 0 && nYcoord < height){
                 // Check if the neighbor is within the valid range
                     if (mapTileData[nXcoord, nYcoord].districtType == innerDistrict){
                         limit1++;
@@ -252,7 +305,7 @@ public class MapGen : MonoBehaviour
     //compare given tile to it's surrounding 9 neighbours
     bool checkNeighbours(Tile tile){
         //Get the two districts to compare
-        if (tile.x < 0 || tile.x >= perlinClass.width || tile.y < 0 || tile.y >= perlinClass.height)
+        if (tile.x < 0 || tile.x >= width || tile.y < 0 || tile.y >= height)
         {
             return false;
         }
@@ -269,7 +322,7 @@ public class MapGen : MonoBehaviour
             int nXcoord = tile.x + neighbourX[i];//Coords for neigbour
             int nYcoord = tile.y + neighbourY[i];
             
-            if (nXcoord >= 0 && nXcoord < perlinClass.width && nYcoord >= 0 && nYcoord < perlinClass.height){
+            if (nXcoord >= 0 && nXcoord < width && nYcoord >= 0 && nYcoord < height){
             // Check if the neighbor is within the valid range
                 if (mapTileData[nXcoord, nYcoord].districtType == innerDistrict){
                     return true; // The tile is within the border of the district
@@ -286,9 +339,9 @@ public class MapGen : MonoBehaviour
         int districtID = 0;
         districtList = new List<District>();
 
-        for (int x = 0; x < perlinClass.width; x++)
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < perlinClass.height; y++)
+            for (int y = 0; y < height; y++)
             {
                 if(!mapTileData[x,y].visited){
                     District district = new District();
@@ -302,7 +355,7 @@ public class MapGen : MonoBehaviour
         }
     }
     void FloodFill(int x, int y, int districtID, DistrictType district){
-        if (x < 0 || x >= perlinClass.width || y < 0 || y >= perlinClass.height)
+        if (x < 0 || x >= width || y < 0 || y >= height)
         {
             return;
         }
@@ -375,10 +428,10 @@ public class MapGen : MonoBehaviour
     }
     void ConvertFromPerlin(float[,] perlinMap)
     {
-        mapTileData = new Tile[perlinClass.width, perlinClass.height];
-        for (int x = 0; x < perlinClass.width; x++)
+        mapTileData = new Tile[width, height];
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < perlinClass.height; y++)
+            for (int y = 0; y < height; y++)
             {
                 float sample = perlinMap[x, y];
                 mapTileData[x,y] = ChooseDistrictType(sample);

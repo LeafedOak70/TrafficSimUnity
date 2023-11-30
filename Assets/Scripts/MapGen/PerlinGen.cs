@@ -20,14 +20,14 @@ public class PerlinNoiseGenerator : MonoBehaviour
         Renderer renderer = GetComponent<Renderer>();
         renderer.material.mainTexture = GenerateTexture();
     }
-    public float[,] getPerlinMap(){
-        float[,] perlinMap = new float[width, height];
-        for (int x = 0; x < width; x++)
+    public float[,] getPerlinMap(int width1, int height1, int scale1){
+        float[,] perlinMap = new float[width1, height1];
+        for (int x = 0; x < width1; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < height1; y++)
             {
-                float xCoord = (float)x / width * scale;
-                float yCoord = (float)y / height * scale;
+                float xCoord = (float)x / width1 * scale1;
+                float yCoord = (float)y / height1 * scale1;
 
                 perlinMap[x, y] = GeneratePerlinNoise(xCoord, yCoord);
             }

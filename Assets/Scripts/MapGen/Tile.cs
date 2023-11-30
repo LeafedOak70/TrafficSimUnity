@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Vector3U =  UnityEngine.Vector3;
 
 public class Tile : MonoBehaviour{
     
@@ -22,9 +23,15 @@ public class Tile : MonoBehaviour{
     public int x;
     public int y;
     public int id;
+    public bool inStreet;
+    public int streetId;
+    //public RoadType roadType;
+    public List<Vector3U> wayPoints;
     public Tile(){
         this.visited = false;
         this.canRoad = true;
+        this.inStreet = false;
+        wayPoints = new List<Vector3U>();
     }
     public Tile(Tile tile){
         this.leftNeighbours = tile.leftNeighbours;
@@ -46,6 +53,10 @@ public class Tile : MonoBehaviour{
         this.x = tile.x;
         this.y =tile.y;
         this.id = tile.id;
+        this.inStreet = tile.inStreet;
+        this.streetId = tile.streetId;
+
+        this.wayPoints = tile.wayPoints;
     }
     public void copyTile(Tile tile){
         this.leftNeighbours = tile.leftNeighbours;
@@ -67,5 +78,9 @@ public class Tile : MonoBehaviour{
         this.x = tile.x;
         this.y =tile.y;
         this.id = tile.id;
+        this.inStreet = tile.inStreet;
+        this.streetId = tile.streetId;
+
+        this.wayPoints = tile.wayPoints;
     }
 }
