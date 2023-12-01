@@ -28,6 +28,8 @@ public class Tile : MonoBehaviour{
     public float gScore;
     public float hScore; 
     public float fScore;
+    public bool canSpawnCar;
+    public RoadType roadType;
     //public RoadType roadType;
     public List<Vector3U> wayPoints;
     public Tile(){
@@ -35,6 +37,7 @@ public class Tile : MonoBehaviour{
         this.canRoad = true;
         this.inStreet = false;
         wayPoints = new List<Vector3U>();
+        this.canSpawnCar = false;
     }
     public Tile(Tile tile){
         this.leftNeighbours = tile.leftNeighbours;
@@ -58,6 +61,7 @@ public class Tile : MonoBehaviour{
         this.id = tile.id;
         this.inStreet = tile.inStreet;
         this.streetId = tile.streetId;
+        this.canSpawnCar = tile.canSpawnCar;
 
         this.wayPoints = tile.wayPoints;
 
@@ -81,6 +85,7 @@ public class Tile : MonoBehaviour{
         this.visited =tile.visited;
         this.districtID = tile.districtID;
         this.districtType =tile.districtType;
+        this.canSpawnCar = tile.canSpawnCar;
 
         this.x = tile.x;
         this.y =tile.y;

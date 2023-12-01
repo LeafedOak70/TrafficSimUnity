@@ -23,51 +23,65 @@ public class Controller : MonoBehaviour{
     public Tile[,] mapTileData;
 
 
-    private void Start(){
+    private void Awake(){
         mapTileData = new Tile[width, height];
         mapGen.generateMap();
-        test();
+        foreach(Street street in mapGen.streetList){
+            
+            getTwoPoints(street);
+        }
+        
+        // test();
         //generateCars()
 
     }
     // private void Update(){
     //     if(testBool){test();}
     // }
-    public void test(){
-        foreach(Street street in mapGen.streetList){
-            if(street.biruArray.Count < 10){return;}
+    public void getTwoPoints(Street street){
+        
+        if(street.biruArray.Count > 10)
+        {
+            //Debug.Log($"Street {street.id} do has many enough buildings");
             int rand1 = RandomU.Range(0,street.biruArray.Count);
             int rand2 = RandomU.Range(0,street.biruArray.Count);
-            if(getStreetTile(street.biruArray[rand1]) != null && getStreetTile(street.biruArray[rand2]) != null){
-                Tile streetTile1 = getStreetTile(street.biruArray[rand1]);
-                Tile streetTile2 = getStreetTile(street.biruArray[rand2]);
-                AStarPathFinder pathFinder = new AStarPathFinder(mapTileData, width, height);
-                List<Tile> path = pathFinder.FindPath(streetTile1,streetTile2);
-                if(path != null){Debug.Log("Found path between to tiles I think");}
-                else{Debug.Log("Actually it's null I think");}
-
-            }else{Debug.Log($"Was null couldnt find street from building for street id {street.id}");}
-            
-            
-        }
-    }
-    public Tile getStreetTile(Tile tile){
-        int[] neighbourX = {0,0,-1,1};
-        int[] neighbourY = {1,-1,0,0};
-        for( int i = 0; i < 4; i++){
-                int newX = tile.x + neighbourX[i];
-                int newY = tile.y + neighbourY[i];
-                //Debug.Log($"Neighbour tile x:{newX} - y:{newY}");
-                if (newX >= 0 && newX < width && newY >= 0 && newY < height){
-                    if(mapGen.mapTileData[newX,newY].tiletype == TileType.Road){
-                        return mapGen.mapTileData[newX,newY];
-                    }
+            while(street.biruArray[rand1].canSpawnCar == false ||street.biruArray[rand2].canSpawnCar == false ){
+                rand1 = RandomU.Range(0,street.biruArray.Count);
+                rand2 = RandomU.Range(0,street.biruArray.Count);
+            }
+            List<Tile> list1 = mapGen.getFourNeighbours(street.biruArray[rand1]);
+            List<Tile> list2 = mapGen.getFourNeighbours(street.biruArray[rand2]);
+            Tile streetTile1 = street.biruArray[rand1];
+            Tile streetTile2 = street.biruArray[rand2];
+            foreach(Tile tile in list1){
+                if(tile.tiletype == TileType.Road){
+                    streetTile1 = tile;
                 }
+            }
+            foreach(Tile tile in list2){
+                if(tile.tiletype == TileType.Road){
+                    streetTile2 = tile;
+                }
+            }
+            AStarPathFinder aStar = new AStarPathFinder(mapGen.mapTileData, width, height); 
+            List<Tile> path = aStar.FindPath(streetTile1, streetTile2);
+            Debug.Log($"Have gotten two tiles in street {street.id} at x1: {streetTile1.x} - y1: {streetTile1.y} and x2: {streetTile2.x} - y2: {streetTile2.y}");
+            Debug.Log($"For path for street id : {street.id} steps needed are {path.Count}");
+            foreach(Tile tile in path){
+                Debug.Log($"Go to x: {tile.x} - y: {tile.y}");
+            }
+            
+            
+            
+                
             
         }
-        return null;
+            
+        
 
     }
+    
+    
 
 
 }

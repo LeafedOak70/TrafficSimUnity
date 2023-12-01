@@ -9,6 +9,7 @@ using QuaternionU = UnityEngine.Quaternion;
 using System.Linq;
 using UnityEditor.PackageManager;
 using Unity.Collections;
+using RandomU = UnityEngine.Random;
 
 public class MapGen : MonoBehaviour
 {
@@ -49,11 +50,54 @@ public class MapGen : MonoBehaviour
         GenerateRoadWithinDistricts();
         IdentifyStreets();
         setRoadNeighbours();
+        setBuildingstoSpawnCar();
         
         GenerateDistrictTiles();//This merely generates the blurry outline of the city
         attachRoadSprites();
         
+        //copyPrefabstoTiles();
+
+        
+        
+        
     }
+    void copyPrefabstoTiles(){
+        foreach(GameObject gameObject in instantiatedTiles){
+            Tile tile = gameObject.GetComponent<Tile>();
+            tile.copyTile(mapTileData[tile.x,tile.y]);
+
+        }
+    }
+    void setBuildingstoSpawnCar(){
+
+        foreach(Street street in streetList){
+            foreach(Tile building in street.biruArray){
+                List<Tile> bNeighbours = getFourNeighbours(building);
+                foreach(Tile neighbour in bNeighbours){
+                    if(neighbour.tiletype == TileType.Road){
+                        building.canSpawnCar = true;
+                    }
+                }
+            }
+        }
+
+    }
+    public List<Tile> getFourNeighbours(Tile tile){
+        int[] neighbourX = {0,0,-1,1};
+        int[] neighbourY = {1,-1,0,0};
+        List<Tile> neighbours = new List<Tile>();
+        for( int i = 0; i < 4; i++){
+            int newX = tile.x + neighbourX[i];
+            int newY = tile.y + neighbourY[i];
+            //Debug.Log($"Neighbour tile x:{newX} - y:{newY}");
+            if (newX >= 0 && newX < width && newY >= 0 && newY < height){
+                neighbours.Add(mapTileData[newX,newY]);
+            }
+            
+        }
+        return neighbours;
+    }
+    
     void IdentifyStreets(){
         int streetId = 0;
         streetList = new List<Street>();
