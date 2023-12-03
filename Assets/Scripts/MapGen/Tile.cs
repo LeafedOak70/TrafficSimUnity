@@ -34,6 +34,11 @@ public class Tile : MonoBehaviour{
     
     //public RoadType roadType;
     public List<Vector3U> wayPoints;
+    public Vector3U vecTopLeft;
+    public Vector3U vecTopRight;
+    public Vector3U vecBottomLeft;
+    public Vector3U vecBottomRight;
+
     public Tile(){
         this.visited = false;
         this.canRoad = true;

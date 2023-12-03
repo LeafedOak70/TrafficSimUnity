@@ -128,6 +128,10 @@ public class SpriteManager : MonoBehaviour{
             vecBotRight.x = (float)(tile.x+0.15); vecBotRight.y = (float)(tile.y-0.15);
         }
         tile.roadType = currRoad;
+        tile.vecBottomLeft = vecBotLeft;
+        tile.vecBottomRight = vecBotRight;
+        tile.vecTopLeft = vecTopLeft;
+        tile.vecTopRight = vecTopRight;
         tile.wayPoints.Add(vecTopLeft);
         tile.wayPoints.Add(vecTopRight);
         tile.wayPoints.Add(vecBotLeft);
