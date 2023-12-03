@@ -114,8 +114,8 @@ public class CarSpawner : MonoBehaviour{
                     streetTile2 = tile;
                 }
             }
-            // Debug.Log($"Got two points at street:{streetTile1.streetId},{streetTile2.streetId}");
-            // Debug.Log($"Points are at x:{streetTile1.x}, y:{streetTile1.y} and x:{streetTile2.x}, y:{streetTile2.y}");
+            Debug.Log($"Got two points at street:{streetTile1.streetId},{streetTile2.streetId}");
+            Debug.Log($"Points are at x:{streetTile1.x}, y:{streetTile1.y} and x:{streetTile2.x}, y:{streetTile2.y}");
             tiles[0] = streetTile1;
             tiles[1] = streetTile2;
             return tiles;

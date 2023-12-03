@@ -23,6 +23,7 @@ public class Car : MonoBehaviour{
     public Tile start;
     public Tile end;
     public Vector3U direction;
+    public List<Vector3U> waypoints = new List<Vector3U>();
 
     
     private void Awake(){
@@ -33,40 +34,103 @@ public class Car : MonoBehaviour{
             setSprite();
         }
     }
-    public void setSprite(){
-        Sprite[] sprites = spriteManager.getCarSprites();
-        this.horizontalSprite = sprites[0];
-        this.verticalSprite = sprites[1];
-    }
+    
     
     void Update(){
         if(isMoving){
             MoveToDestination();
         }
     }
-    
     public void SpawnAndMove(Tile start, Tile end)
     {
-        // Debug.Log($"Spawn waypoint {start.vecBottomRight.x}:{start.vecBottomRight.y}");
-        // Set the initial position and destination for the car
         Vector2U dir = getDirection(start, path[1]);
-        // Debug.Log($"Start tile at {start.x}:{start.y}");
-        // Debug.Log($"Path 0 at {path[0].x}:{path[0].y}");
-        setStart(start);
+        setStartandEnd(start,end);
         setDirection(dir);
         Vector3U spawnPoint = getWaypointwithDirection(dir, start);
-        // Debug.Log($"Spawning a car at {spawnPoint.x}:{spawnPoint.y}");
         SetInitialPosition(spawnPoint);
-        //SetDestination(targetLocation);
-
-        // Enable movement for the car
-        isMoving = true;
+        generateWaypoint();
+        //isMoving = true;
     }
+    void MoveToDestination(){
+
+    }
+    void generateWaypoint()
+    {
+        for(int i =1; i < path.Count-1; i++){
+            addWaypoints(path[i-1],path[i],path[i+1]);//TODO: This doesn't add the last tiles waypoint add that exception
+
+        }
+        
+    }
+    void addWaypoints(Tile prevTile, Tile currTile, Tile nextTile){
+        Vector2U cameFrom = getDirection(prevTile,currTile);
+        Vector2U goingTo = getDirection(currTile,nextTile);
+        if(cameFrom.x == 0 && cameFrom.y == -1){//Came From Top
+            if(goingTo.x == 1 && goingTo.y == 0){//Going right
+                waypoints.Add(currTile.vecTopLeft);
+                waypoints.Add(currTile.vecBottomLeft);
+                waypoints.Add(currTile.vecBottomRight);
+            }
+            if(goingTo.x == -1 && goingTo.y == 0){//Going left
+                waypoints.Add(currTile.vecTopLeft);
+            }
+            if(goingTo.x == 0 && goingTo.y == -1){//Going down
+                waypoints.Add(currTile.vecTopLeft);
+                waypoints.Add(currTile.vecBottomLeft);
+            }
+        }else if(cameFrom.x == 1 && cameFrom.y == 0){//Came From Left
+            if(goingTo.x == 0 && goingTo.y == 1){//Going Top
+                waypoints.Add(currTile.vecBottomLeft);
+                waypoints.Add(currTile.vecBottomRight);
+                waypoints.Add(currTile.vecTopRight);
+            }
+            if(goingTo.x == 1 && goingTo.y == 0){//Going Right
+                waypoints.Add(currTile.vecBottomLeft);
+                waypoints.Add(currTile.vecBottomRight);
+            }
+            if(goingTo.x == 0 && goingTo.y == -1){//Going Down
+                waypoints.Add(currTile.vecBottomLeft);
+            }
+        }else if(cameFrom.x == -1 && cameFrom.y == 0){//Came From Right
+            if(goingTo.x == -1 && goingTo.y == 0){//Going Left
+                waypoints.Add(currTile.vecTopRight);
+                waypoints.Add(currTile.vecTopLeft);
+            }
+            if(goingTo.x == 0 && goingTo.y == 1){//Going Up
+                waypoints.Add(currTile.vecTopRight);
+            }
+            if(goingTo.x == 0 && goingTo.y == -1){//Going Down
+                waypoints.Add(currTile.vecTopRight);
+                waypoints.Add(currTile.vecTopLeft);
+                waypoints.Add(currTile.vecBottomLeft);
+            }
+        }else if(cameFrom.x == 0 && cameFrom.y == 1){//Came From Bot
+            if(goingTo.x == -1 && goingTo.y == 0){//Going Left
+                waypoints.Add(currTile.vecBottomRight);
+                waypoints.Add(currTile.vecTopRight);
+                waypoints.Add(currTile.vecTopLeft);
+            }
+            if(goingTo.x == 1 && goingTo.y == 0){//Going Right
+                waypoints.Add(currTile.vecBottomRight);
+            }
+            if(goingTo.x == 0 && goingTo.y == 1){//Going up
+                waypoints.Add(currTile.vecBottomRight);
+                waypoints.Add(currTile.vecTopRight);
+            }
+        }
+    }
+    public void setSprite(){
+        Sprite[] sprites = spriteManager.getCarSprites();
+        this.horizontalSprite = sprites[0];
+        this.verticalSprite = sprites[1];
+    }
+    
     void setDirection(Vector3U dir){
         direction = dir;
     }
-    void setStart(Tile start){
+    void setStartandEnd(Tile start, Tile end){
         this.start = start;
+        this.end = end;
     }
     void SetInitialPosition(Vector3U newPosition)
     {
@@ -77,23 +141,23 @@ public class Car : MonoBehaviour{
         Vector3U returnPoint = new Vector3U();
         if(dir.y == 0){//Going horizontal
             if(dir.x == -1){//Going left
-            Debug.Log($"Hori-Left waypoint");
+            // Debug.Log($"Hori-Left waypoint");
                 returnPoint = tile.vecTopLeft;
-                Debug.Log($"Getting waypoint {tile.vecTopLeft.x}:{tile.vecTopLeft.y}");
+                // Debug.Log($"Getting waypoint {tile.vecTopLeft.x}:{tile.vecTopLeft.y}");
             }else if(dir.x == 1){//Going right
-            Debug.Log($"Hori-Right waypoint");
+            // Debug.Log($"Hori-Right waypoint");
                 returnPoint = tile.vecBottomRight;
-                Debug.Log($"Getting waypoint {tile.vecBottomRight.x}:{tile.vecBottomRight.y}");
+                // Debug.Log($"Getting waypoint {tile.vecBottomRight.x}:{tile.vecBottomRight.y}");
             }   
         }else if(dir.x == 0){//Going vertical
             if(dir.y == 1){//Going Up
-            Debug.Log($"Veri-Left waypoint");
+            // Debug.Log($"Veri-Left waypoint");
                 returnPoint = tile.vecTopRight;
-                Debug.Log($"Getting waypoint {tile.vecTopRight.x}:{tile.vecTopRight.y}");
+                // Debug.Log($"Getting waypoint {tile.vecTopRight.x}:{tile.vecTopRight.y}");
             }else if(dir.y == -1){//Going Down
-            Debug.Log($"Veri-Left waypoint");
+            // Debug.Log($"Veri-Left waypoint");
                 returnPoint = tile.vecBottomLeft;
-                Debug.Log($"Getting waypoint {tile.vecBottomLeft.x}:{tile.vecBottomLeft.y}");
+                // Debug.Log($"Getting waypoint {tile.vecBottomLeft.x}:{tile.vecBottomLeft.y}");
             } 
         }
         
@@ -119,23 +183,7 @@ public class Car : MonoBehaviour{
         destination = newDest;
         isMoving = true;
     }
-    void MoveToDestination(){
-        Vector2U direction = (destination - (Vector2U)transform.position).normalized;
-
-        // Check if the car has reached the destination
-        if (Vector2U.Distance(transform.position, destination) < 0.1f)
-        {
-            isMoving = false;
-            return;
-        }
-
-        // Update the sprite based on movement direction
-        UpdateSprite(direction);
-
-        // Move the car
-        transform.Translate(direction * speed * Time.deltaTime);
-        //spriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
-    }
+    
     void UpdateSprite(Vector2U movement)
     {
         if (Mathf.Abs(movement.x) > Mathf.Abs(movement.y))
