@@ -18,6 +18,7 @@ public class Street {
     public Street(){
         streetArray = new List<Tile>();
         biruArray = new List<Tile>();
+        id= 0;
     }
 
 }

@@ -25,11 +25,13 @@ public class Tile : MonoBehaviour{
     public int id;
     public bool inStreet;
     public int streetId;
-    public float gScore;
-    public float hScore; 
-    public float fScore;
+    public int gCost;
+    public int hCost; 
+    public int fCost;
     public bool canSpawnCar;
     public RoadType roadType;
+    public Tile prevTile;
+    
     //public RoadType roadType;
     public List<Vector3U> wayPoints;
     public Tile(){
@@ -65,9 +67,12 @@ public class Tile : MonoBehaviour{
 
         this.wayPoints = tile.wayPoints;
 
-        this.fScore = tile.fScore;
-        this.gScore = tile.hScore;
-        this.gScore = tile.gScore;
+        this.fCost = tile.fCost;
+        this.gCost = tile.hCost;
+        this.gCost = tile.gCost;
+    }
+    public void CalculateFCost(){
+        fCost = gCost + hCost;
     }
     public void copyTile(Tile tile){
         this.leftNeighbours = tile.leftNeighbours;

@@ -61,12 +61,15 @@ public class MapGen : MonoBehaviour
         
         
     }
-    void copyPrefabstoTiles(){
+    public Tile[,] getGameTiles(){
+        Tile[,] gameTiles = new Tile[width, height];
         foreach(GameObject gameObject in instantiatedTiles){
             Tile tile = gameObject.GetComponent<Tile>();
-            tile.copyTile(mapTileData[tile.x,tile.y]);
+            gameTiles[tile.x,tile.y] = tile;
+            //tile.copyTile(mapTileData[tile.x,tile.y]);
 
         }
+        return gameTiles;
     }
     void setBuildingstoSpawnCar(){
 
@@ -490,6 +493,8 @@ public class MapGen : MonoBehaviour
                 mapTileData[x,y].x = x;
                 mapTileData[x,y].y = y;
                 mapTileData[x,y].id = x +y;
+                mapTileData[x,y].gCost = 999999;
+                mapTileData[x,y].CalculateFCost();
                 //Instantiate(tilePrefab, new Vector3U(x, y, 0), QuaternionU.identity);
             }
         }

@@ -19,11 +19,16 @@ public class Car : MonoBehaviour{
     private Vector2U destination;
     private bool isMoving = false;
     
+    
 
     void Start(){
         spriteRenderer = GetComponent<SpriteRenderer>();
-        SetDestination(new Vector2U(60,60));
         spriteRenderer.sortingOrder = 10000;
+        SpriteManager spriteManager = GameObject.FindObjectOfType<SpriteManager>();
+        Sprite[] sprites = spriteManager.getCarSprites();
+        horizontalSprite = sprites[0];
+        verticalSprite = sprites[1];
+
     }
     void Update(){
         if(isMoving){
@@ -32,6 +37,19 @@ public class Car : MonoBehaviour{
     }
     void Move(){
 
+    }
+    public void SpawnAndMove(Vector2U spawnLocation, Vector2U targetLocation, List<Tile> path)
+    {
+        // Set the initial position and destination for the car
+        SetInitialPosition(spawnLocation);
+        SetDestination(targetLocation);
+
+        // Enable movement for the car
+        isMoving = true;
+    }
+    void SetInitialPosition(Vector2U newPosition)
+    {
+        transform.position = new Vector3U(newPosition.x, newPosition.y, transform.position.z);
     }
     void SetDestination(Vector2U newDest){
         destination = newDest;

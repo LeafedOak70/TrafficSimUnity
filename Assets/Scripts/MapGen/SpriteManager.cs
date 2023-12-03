@@ -9,6 +9,7 @@ using QuaternionU = UnityEngine.Quaternion;
 using RandomU = UnityEngine.Random;
 using System.Linq;
 using UnityEditor.PackageManager;
+using UnityEditor.Experimental.GraphView;
 
 public class SpriteManager : MonoBehaviour{
     public Sprite horiRoad;
@@ -19,8 +20,16 @@ public class SpriteManager : MonoBehaviour{
     public Sprite[] roadEnd;
     public Sprite[] biru;
     public Sprite errorSprite;
+    public Sprite[] carHoriSprites;
+    public Sprite[] carVeriSprites;
 
-
+    public Sprite[] getCarSprites(){
+        int rand1 = RandomU.Range(0,carHoriSprites.Length);
+        Sprite[] carS = new Sprite[2];
+        carS[0] = carHoriSprites[rand1];
+        carS[1] = carVeriSprites[rand1];
+        return carS;
+    }
     public void getBiruSprite(Tile tile, SpriteRenderer spriteRenderer){
         
         int randomBiru = RandomU.Range(0,biru.Length);

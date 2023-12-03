@@ -11,124 +11,130 @@
     using UnityEditor.PackageManager;
     public class AStarPathFinder
     {
-        private Tile[,] mapTiles;
+        private List<Tile> mapTiles;
         private int width;
         private int height;
-        public AStarPathFinder(Tile[,] allTiles, int w, int h){
+        private int straightCost = 10;
+        public AStarPathFinder(List<Tile> allTiles, int w, int h){
             mapTiles = allTiles;
             width = w;
             height = h;
         }
         public List<Tile> FindPath(Tile startTile, Tile targetTile)
         {
-            HashSet<Tile> openSet = new HashSet<Tile>();
-            HashSet<Tile> closedSet = new HashSet<Tile>();
-            Dictionary<Tile, Tile> cameFrom = new Dictionary<Tile, Tile>();
-            Dictionary<Tile, float> gScore = new Dictionary<Tile, float>();
-            Dictionary<Tile, float> fScore = new Dictionary<Tile, float>();
-
-            openSet.Add(startTile);
-            gScore[startTile] = 0;
-            fScore[startTile] = HeuristicCostEstimate(startTile, targetTile);
-
-            while (openSet.Count > 0)
-            {
-                Tile currentTile = GetTileWithLowestFScore(openSet, fScore);
-
-                if (currentTile == targetTile)
-                    return ReconstructPath(cameFrom, targetTile);
-
-                openSet.Remove(currentTile);
-                closedSet.Add(currentTile);
-
-                foreach (Tile neighborTile in GetNeighborTiles(currentTile))
-                {
-                    if (closedSet.Contains(neighborTile))
+            // if(startTile.tiletype != TileType.Road){Debug.Log($"This starting tile not road at tile x: {startTile.x} - y: {startTile.y}" );}
+            // if(targetTile.tiletype != TileType.Road){Debug.Log($"This end tile not road at tile x: {targetTile.x} - y: {targetTile.y}");}
+            List<Tile> openList = new List<Tile>();
+            List<Tile> closedList = new List<Tile>();
+            openList.Add(startTile);
+            foreach(Tile tile in mapTiles){
+                tile.gCost = 8888888;
+                tile.CalculateFCost();
+                tile.prevTile = null;
+            }
+            // Debug.Log($"Starting from tile x: {startTile.x} - y: {startTile.y}");
+            startTile.gCost = 0;
+            startTile.hCost = ManhattanCostEstimate(startTile, targetTile);
+            startTile.CalculateFCost();
+            
+            while(openList.Count > 0){
+                Tile currentTile = GetTileWithLowestFScore(openList);
+                // Debug.Log($"Checking tile x: {currentTile.x} - y: {currentTile.y}");
+                if(currentTile.x == targetTile.x && currentTile.y == targetTile.y){
+                    // Debug.Log($"Reached End as current Tile is at x: {currentTile.x},y: {currentTile.y} nad target is x: {targetTile.x},y: {targetTile.y}");
+                    return CalculatePath(currentTile);
+                }
+                
+                openList.Remove(currentTile);
+                closedList.Add(currentTile);
+                
+                foreach(Tile neighbour in getFourNeighbours(currentTile)){
+                    if(closedList.Contains(neighbour)) continue;
+                    if(neighbour.tiletype != TileType.Road){
+                        closedList.Add(neighbour);
                         continue;
+                    }
+                    if(neighbour.tiletype == TileType.Road){
+                        // Debug.Log($"Found road neighbour at tile x: {neighbour.x} - y: {neighbour.y}");
+                    }
+                    int tentativeGCost = currentTile.gCost + ManhattanCostEstimate(currentTile, neighbour);
+                    if(tentativeGCost <  neighbour.gCost){
+                        neighbour.prevTile = currentTile;
+                        // Debug.Log($"Current is at x: {currentTile.x},y: {currentTile.y}");
+                        // Debug.Log($"Neighbour is at x: {neighbour.x},y: {neighbour.y}");
+                        // Debug.Log($"Neighbour's previous is at x: {neighbour.prevTile.x},y: {neighbour.prevTile.y}");
 
-                    float tentativeGScore = gScore[currentTile] + DistanceBetween(currentTile, neighborTile);
+                        neighbour.gCost = tentativeGCost;
+                        neighbour.hCost = ManhattanCostEstimate(neighbour, targetTile);
+                        neighbour.CalculateFCost();
+                        // Debug.Log($"Has better g Cost");
 
-                    if (!openSet.Contains(neighborTile) || tentativeGScore < gScore[neighborTile])
-                    {
-                        cameFrom[neighborTile] = currentTile;
-                        gScore[neighborTile] = tentativeGScore;
-                        fScore[neighborTile] = gScore[neighborTile] + HeuristicCostEstimate(neighborTile, targetTile);
+                        if(!openList.Contains(neighbour)){
+                            openList.Add(neighbour);
+                            // Debug.Log($"Adding to dings");
+                        }
 
-                        if (!openSet.Contains(neighborTile))
-                            openSet.Add(neighborTile);
                     }
                 }
             }
 
-            return null; // No path found
+            return null;
+
+        
         }
-
-        float HeuristicCostEstimate(Tile start, Tile target)
+        public int ManhattanCostEstimate(Tile start, Tile target)
         {
-            // You can use different heuristic functions based on your needs
-            return Mathf.Abs(start.x - target.x) + Mathf.Abs(start.y - target.y);
+            
+            return (int)(Mathf.Abs(start.x - target.x) + Mathf.Abs(start.y - target.y) * straightCost);
         }
-
-        float DistanceBetween(Tile tile1, Tile tile2)
+        
+        Tile GetTileWithLowestFScore(List<Tile> openSet)
         {
-            // Adjust this based on your needs
-            return Mathf.Sqrt(Mathf.Pow(tile1.x - tile2.x, 2) + Mathf.Pow(tile1.y - tile2.y, 2));
-        }
-
-        Tile GetTileWithLowestFScore(HashSet<Tile> openSet, Dictionary<Tile, float> fScore)
-        {
-            Tile lowestTile = null;
-            float lowestScore = float.MaxValue;
-
+            Tile lowestTile = openSet[0];
+            int lowestF = openSet[0].fCost;
             foreach (Tile tile in openSet)
             {
-                if (fScore.ContainsKey(tile) && fScore[tile] < lowestScore)
-                {
+                if(tile.fCost < lowestF){
+                    lowestF = tile.fCost;
                     lowestTile = tile;
-                    lowestScore = fScore[tile];
                 }
             }
 
             return lowestTile;
         }
-
-        List<Tile> ReconstructPath(Dictionary<Tile, Tile> cameFrom, Tile currentTile)
-        {
-            List<Tile> path = new List<Tile> { currentTile };
-
-            while (cameFrom.ContainsKey(currentTile))
-            {
-                currentTile = cameFrom[currentTile];
-                path.Insert(0, currentTile);
+        List<Tile> CalculatePath(Tile endTile){
+            List<Tile> path = new List<Tile>();
+            path.Add(endTile);
+            Tile currTile = endTile;
+            // Debug.Log($"Attempting to print end to start, from x:{endTile.x}, y:{endTile.y}");
+            while(currTile.prevTile != null){
+                path.Add(currTile.prevTile);
+                // Debug.Log($"go x:{currTile.x}, y:{currTile.y}");
+                currTile = currTile.prevTile;
             }
-
+            path.Reverse();
             return path;
         }
-
-        List<Tile> GetNeighborTiles(Tile tile)
-        {
-            // Implement this based on your map structure
-            // Get the neighboring tiles of the given tile
-            List<Tile> neighbors = new List<Tile>();
-
-            // Example: Assuming a grid map
-            int[] neighborX = { 0, 0, -1, 1 };
-            int[] neighborY = { 1, -1, 0, 0 };
-
-            for (int i = 0; i < 4; i++)
-            {
-                int newX = tile.x + neighborX[i];
-                int newY = tile.y + neighborY[i];
-
-                // Check if the neighbor is within the valid range
-                if (newX >= 0 && newX < width && newY >= 0 && newY < height)
-                {
-                    // Add the valid neighboring tile to the list
-                    Tile neighborTile = mapTiles[newX, newY];
-                    neighbors.Add(neighborTile);
+        public List<Tile> getFourNeighbours(Tile tile){
+            int[] neighbourX = {0,0,-1,1};
+            int[] neighbourY = {1,-1,0,0};
+            // if(tile == null){Debug.Log("It s a nunll tile llol");}
+            List<Tile> neighbours = new List<Tile>();
+            for( int i = 0; i < 4; i++){
+                int newX = tile.x + neighbourX[i];
+                int newY = tile.y + neighbourY[i];
+                //Debug.Log($"Neighbour tile x:{newX} - y:{newY}");
+                if (newX >= 0 && newX < width && newY >= 0 && newY < height){
+                    foreach(Tile tileT in mapTiles){
+                        if(tileT.x == newX && tileT.y == newY){
+                            if(tileT.streetId == tile.streetId){
+                                neighbours.Add(tileT);
+                            }
+                        }
+                    }
                 }
+                
             }
-
-            return neighbors;
+            return neighbours;
         }
     }
