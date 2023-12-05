@@ -20,9 +20,9 @@ public class Controller : MonoBehaviour{
     // public PerlinNoiseGenerator perlinGen;
     public bool testBool;
     public CarSpawner carSpawner;
-    public int width = 128;
-    public int height = 128;
-    public int scale = 128;
+    public int width;
+    public int height;
+
     public List<Tile> gameList;
     public List<Street> streetList;
     public Tile[,] mapArray;
@@ -31,7 +31,7 @@ public class Controller : MonoBehaviour{
 
     private void Awake(){
         streetList = new List<Street>();
-        mapGen.generateMap(width, height, scale);
+        mapGen.generateMap(width, height);
         mapArray = mapGen.mapTileData;
         gameList = mapGen.getGameTiles().Cast<Tile>().ToList();
         streetList = getStreets(gameList);

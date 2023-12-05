@@ -162,9 +162,9 @@ MonoBehaviour:
   lacunarity: 2
   seed: 6
   toggleDistrict: 1
-  downtownThreshold: 0.3
-  urbanThreshold: 0.4
-  ruralThreshold: 0.7
+  downtownThreshold: 0.4
+  urbanThreshold: 0.6
+  ruralThreshold: 0.8
 --- !u!23 &109733055
 MeshRenderer:
   m_ObjectHideFlags: 0

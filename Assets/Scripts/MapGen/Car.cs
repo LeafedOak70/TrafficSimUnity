@@ -24,6 +24,7 @@ public class Car : MonoBehaviour{
     public Tile end;
     public Vector3U direction;
     public List<Vector3U> waypoints = new List<Vector3U>();
+    public bool reachedDestination = false; 
 
     
     private void Awake(){
@@ -39,6 +40,8 @@ public class Car : MonoBehaviour{
     void Update(){
         if(isMoving){
             MoveToDestination();
+        }else if(!isMoving){
+            gameObject.SetActive(false);
         }
     }
     public void SpawnAndMove(Tile start, Tile end)
@@ -83,14 +86,14 @@ public class Car : MonoBehaviour{
         }
         else
         {
-            // If there are no more waypoints, stop moving
             if (waypoints.Count == 0 && transform.position.x == end.x && transform.position.y == end.y)
             {
                 
-
-                Destroy(gameObject); // Uncomment this line to destroy the car GameObject
-                // gameObject.SetActive(false); // Uncomment this line to disable the car GameObject
+                reachedDestination  =true;
+                // Destroy(gameObject); // Uncomment this line to destroy the car GameObject
+                gameObject.SetActive(false); // Uncomment this line to disable the car GameObject
             }
+            // If there are no more waypoints, stop moving
             isMoving = false;
         }
     }

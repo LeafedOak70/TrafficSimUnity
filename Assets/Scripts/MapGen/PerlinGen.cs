@@ -11,7 +11,7 @@ public class PerlinNoiseGenerator : MonoBehaviour
     public int seed = 6;
     public bool toggleDistrict;
 
-    public float downtownThreshold = 0.3f;
+    public float downtownThreshold = 0.4f;
     public float urbanThreshold = 0.6f;
     public float ruralThreshold = 0.8f;
 
@@ -20,10 +20,7 @@ public class PerlinNoiseGenerator : MonoBehaviour
         Renderer renderer = GetComponent<Renderer>();
         renderer.material.mainTexture = GenerateTexture();
     }
-    public float[,] getPerlinMap(int w, int h, int s){
-        this.width = w;
-        this.height = h;
-        // this.scale = s;
+    public float[,] getPerlinMap(int w, int h){
         float[,] perlinMap = new float[width, height];
         for (int x = 0; x < width; x++)
         {

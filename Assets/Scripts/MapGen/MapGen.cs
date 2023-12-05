@@ -10,10 +10,11 @@ using System.Linq;
 using UnityEditor.PackageManager;
 using Unity.Collections;
 using RandomU = UnityEngine.Random;
+using TreeEditor;
 
 public class MapGen : MonoBehaviour
 {
-    public PerlinNoiseGenerator perlinClass;
+    
     public SpriteManager spriteManager;
     public GameObject downtownPrefab;
     public GameObject urbanPrefab;
@@ -30,19 +31,20 @@ public class MapGen : MonoBehaviour
     private int[,] dirArray;
     public int width;
     public int height;
-    public int scale;
-
     // private void Start(){
     //     height = 128; width = 128; scale = 128;
     //     generateMap();
 
     // }
 
-    public void generateMap(int w, int h, int s)
+    public void generateMap(int w, int h)
     {
-        width = w; height = h; scale = s;
+        PerlinNoiseGenerator perlinClass = new PerlinNoiseGenerator();
+        perlinClass.width = width;
+        perlinClass.height = height;
+        width = w; height = h;
         dirArray = new int[,]{{-1,0},{0,1},{1,0},{0,-1}}; 
-        float[,] perlinMap = perlinClass.getPerlinMap(width, height, scale);
+        float[,] perlinMap = perlinClass.getPerlinMap(width, height);
         ConvertFromPerlin(perlinMap);
         removeStraggler();//removes little one tile pokey in things
         IdentifyDistricts();
@@ -184,6 +186,7 @@ public class MapGen : MonoBehaviour
         foreach(District district in districtList){
             // Debug.Log($"in {district.districtType}, id {district.id}");
             //find middle tile of district
+            if(district.districtType == DistrictType.Downtown){
                 int totalX = 0;
                 int totalY = 0;;
                 foreach(Tile tile in district.tileArray){
@@ -194,12 +197,13 @@ public class MapGen : MonoBehaviour
                 int avgY = totalY/district.tileArray.Count;
                 Vector2U up = new Vector2U(0,1);
                 // Debug.Log($"Starting road monster at x: {avgX} : y: {avgY}");
-            if(district.districtType == DistrictType.Downtown){
+            
                 roadMonster(avgX, avgY,5,5,up,district.districtType);
-            }else if(district.districtType == DistrictType.Urban){
-                Debug.Log($"Starting road monster at Urban at x:{avgX}, y:{avgY}");
-                roadMonster(88, 83,7,7,up,district.districtType);
             }
+            // if(district.districtType == DistrictType.Urban){
+            //    Vector2U up = new Vector2U(0,1);
+            //     roadMonster(88, 83,7,7,up,district.districtType);
+            // }
         }
     }
     void roadMonster(int x, int y, int timerL, int timerR, Vector2U vector, DistrictType districtType){
@@ -503,16 +507,16 @@ public class MapGen : MonoBehaviour
     Tile ChooseDistrictType(float sample)
     {
         Tile tile = new Tile();
-        if (sample < perlinClass.downtownThreshold)
+        if (sample < 0.4)
         {
             tile.districtType = DistrictType.Downtown;
             
         }
-        else if (sample < perlinClass.urbanThreshold)
+        else if (sample < 0.6)
         {
             tile.districtType = DistrictType.Urban;
         }
-        else if (sample < perlinClass.ruralThreshold)
+        else if (sample < 0.8)
         {
             tile.districtType = DistrictType.Rural;
         }
