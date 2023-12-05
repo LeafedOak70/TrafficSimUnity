@@ -38,11 +38,11 @@ public class MapGen : MonoBehaviour
 
     // }
 
-    public void generateMap()
+    public void generateMap(int w, int h, int s)
     {
-        width = 128; height = 128; scale = 128;
+        width = w; height = h; scale = s;
         dirArray = new int[,]{{-1,0},{0,1},{1,0},{0,-1}}; 
-        float[,] perlinMap = perlinClass.getPerlinMap();
+        float[,] perlinMap = perlinClass.getPerlinMap(width, height, scale);
         ConvertFromPerlin(perlinMap);
         removeStraggler();//removes little one tile pokey in things
         IdentifyDistricts();
@@ -192,12 +192,13 @@ public class MapGen : MonoBehaviour
                 }
                 int avgX = totalX/district.tileArray.Count;
                 int avgY = totalY/district.tileArray.Count;
-                Vector2U up = new Vector2U(0,-1);
+                Vector2U up = new Vector2U(0,1);
                 // Debug.Log($"Starting road monster at x: {avgX} : y: {avgY}");
             if(district.districtType == DistrictType.Downtown){
                 roadMonster(avgX, avgY,5,5,up,district.districtType);
             }else if(district.districtType == DistrictType.Urban){
-                roadMonster(avgX, avgY,5,5,up,district.districtType);
+                Debug.Log($"Starting road monster at Urban at x:{avgX}, y:{avgY}");
+                roadMonster(88, 83,7,7,up,district.districtType);
             }
         }
     }

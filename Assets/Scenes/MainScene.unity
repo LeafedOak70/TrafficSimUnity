@@ -264,7 +264,7 @@ MonoBehaviour:
   carSpawner: {fileID: 764375653}
   width: 128
   height: 128
-  scale: 128
+  scale: 64
   gameList: []
 --- !u!4 &219055349
 Transform:

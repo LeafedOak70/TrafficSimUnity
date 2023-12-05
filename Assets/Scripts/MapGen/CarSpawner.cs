@@ -29,8 +29,8 @@ public class CarSpawner : MonoBehaviour{
         this.gameList = gameList;
         mapTileData = mapArr;
         
-        // StartCoroutine(SpawnCarsSlowly());
-        SpawnCarsSlowly();
+        StartCoroutine(SpawnCarsSlowly());
+        // SpawnCarsSlowly();
 
     }
 
@@ -62,8 +62,8 @@ public class CarSpawner : MonoBehaviour{
         carComponent.SpawnAndMove(start,end);
         
     }
-
-    public void SpawnCarsSlowly(){
+    // public void SpawnCarsSlowly(){
+    IEnumerator SpawnCarsSlowly(){
         
         foreach(Street street in streetList){
             if(street.biruArray.Count > 10){
@@ -74,7 +74,7 @@ public class CarSpawner : MonoBehaviour{
                     // Debug.Log($"Got two points at street:{spawnTile.streetId},{targetTile.streetId}");
                     // Debug.Log($"Points are at x:{spawnTile.x}, y:{spawnTile.y} and x:{targetTile.x}, y:{targetTile.y}");
                     spawnCar(spawnTile, targetTile);
-                    // yield return new WaitForSeconds(1.0f);
+                    yield return new WaitForSeconds(1.0f);
                 }
 
             }

@@ -11,6 +11,7 @@ using System.Linq;
 using UnityEditor.PackageManager;
 using Unity.VisualScripting;
 using JetBrains.Annotations;
+using UnityEditor.Build.Content;
 
 public class Controller : MonoBehaviour{
     public MapGen mapGen;
@@ -30,7 +31,7 @@ public class Controller : MonoBehaviour{
 
     private void Awake(){
         streetList = new List<Street>();
-        mapGen.generateMap();
+        mapGen.generateMap(width, height, scale);
         mapArray = mapGen.mapTileData;
         gameList = mapGen.getGameTiles().Cast<Tile>().ToList();
         streetList = getStreets(gameList);

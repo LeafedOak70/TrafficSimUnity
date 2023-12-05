@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class PerlinNoiseGenerator : MonoBehaviour
 {
-    public int width = 128;
-    public int height = 128;
-    public float scale = 128;
+    public int width;
+    public int height;
+    public float scale = 0.9f;
     public int octaves = 6;
     public float persistence = 0.5f;
     public float lacunarity = 2;
@@ -20,7 +20,10 @@ public class PerlinNoiseGenerator : MonoBehaviour
         Renderer renderer = GetComponent<Renderer>();
         renderer.material.mainTexture = GenerateTexture();
     }
-    public float[,] getPerlinMap(){
+    public float[,] getPerlinMap(int w, int h, int s){
+        this.width = w;
+        this.height = h;
+        // this.scale = s;
         float[,] perlinMap = new float[width, height];
         for (int x = 0; x < width; x++)
         {
