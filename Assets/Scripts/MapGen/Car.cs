@@ -11,7 +11,7 @@ using System.Linq;
 using UnityEditor.PackageManager;
 
 public class Car : MonoBehaviour{
-    public float speed = 5f;
+    public float speed = 1f;
     public float rotationSpeed = 180f;
     public Sprite horizontalSprite;
     public Sprite verticalSprite;
@@ -49,11 +49,52 @@ public class Car : MonoBehaviour{
         Vector3U spawnPoint = getWaypointwithDirection(dir, start);
         SetInitialPosition(spawnPoint);
         generateWaypoint();
-        //isMoving = true;
+        isMoving = true;
     }
-    void MoveToDestination(){
+    void MoveToDestination()
+    {
+        if (waypoints.Count > 0)
+        {
 
+            Vector3U targetWaypoint = waypoints[0];
+            Vector3U currentPosition = transform.position;
+
+            // Calculate the direction and distance to the target waypoint
+            Vector3U directionToWaypoint = (targetWaypoint - currentPosition).normalized;
+            float distanceToWaypoint = Vector3U.Distance(currentPosition, targetWaypoint);
+
+            // Move towards the waypoint
+            transform.Translate(directionToWaypoint * speed * Time.deltaTime);
+
+            // Check if the car has reached the waypoint
+            if (distanceToWaypoint < 0.1f)
+            {
+                // Remove the reached waypoint from the list
+                waypoints.RemoveAt(0);
+
+                // Update the sprite based on the next movement
+                if (waypoints.Count > 0)
+                {
+                    Vector2U nextMovement = (Vector2U)(waypoints[0] - currentPosition);
+                    UpdateSprite(nextMovement);
+                }
+            }
+            if (waypoints.Count == 0 && transform.position.x == end.x && transform.position.y == end.y)
+            {
+                
+
+                Destroy(gameObject); // Uncomment this line to destroy the car GameObject
+                // gameObject.SetActive(false); // Uncomment this line to disable the car GameObject
+            }
+        }
+        else
+        {
+            // If there are no more waypoints, stop moving
+
+            isMoving = false;
+        }
     }
+
     void generateWaypoint()
     {
         for(int i =1; i < path.Count-1; i++){

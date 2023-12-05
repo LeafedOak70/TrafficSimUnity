@@ -29,8 +29,8 @@ public class CarSpawner : MonoBehaviour{
         this.gameList = gameList;
         mapTileData = mapArr;
         
-        
-        findStartEnd();
+        // StartCoroutine(SpawnCarsSlowly());
+        SpawnCarsSlowly();
 
     }
 
@@ -63,68 +63,70 @@ public class CarSpawner : MonoBehaviour{
         
     }
 
-    public void findStartEnd(){
+    public void SpawnCarsSlowly(){
         
         foreach(Street street in streetList){
-            Tile[] twoPoints = new Tile[2];
-            twoPoints = getTwoPoints(street);
-            if(twoPoints != null){
-                Tile spawnTile = twoPoints[0];
-                Tile targetTile = twoPoints[1];
-                spawnCar(spawnTile, targetTile);
-              
+            if(street.biruArray.Count > 10){
+                int carNum = Mathf.CeilToInt(street.biruArray.Count / 10.0f);
+                for(int i = 0; i < carNum; i++){
+                    Tile spawnTile = getSpawn(street);
+                    Tile targetTile = getTarget(street,spawnTile);
+                    // Debug.Log($"Got two points at street:{spawnTile.streetId},{targetTile.streetId}");
+                    // Debug.Log($"Points are at x:{spawnTile.x}, y:{spawnTile.y} and x:{targetTile.x}, y:{targetTile.y}");
+                    spawnCar(spawnTile, targetTile);
+                    // yield return new WaitForSeconds(1.0f);
+                }
+
             }
+            
             
 
         }
     }
     
     public void printPath(List<Tile> path){
-            Debug.Log($"Path count is {path.Count}");
-            Debug.Log("To get to target go to");
-            int step = 1;
-            foreach(Tile tile in path){
-                Debug.Log($"Step {step} - x:{tile.x}, y:{tile.y}");
-                step++;
-            }
-
-        }
-    public Tile[] getTwoPoints(Street street){
-        Tile[] tiles = new Tile[2];
-        if(street.biruArray.Count > 10)
-        {
-            //Debug.Log($"Street {street.id} do has many enough buildings");
-            int rand1 = RandomU.Range(0,street.biruArray.Count);
-            int rand2 = RandomU.Range(0,street.biruArray.Count);
-            while(street.biruArray[rand1].canSpawnCar == false ||street.biruArray[rand2].canSpawnCar == false ){
-                rand1 = RandomU.Range(0,street.biruArray.Count);
-                rand2 = RandomU.Range(0,street.biruArray.Count);
-            }
-            List<Tile> list1 = getFourNeighbours(street.biruArray[rand1]);
-            List<Tile> list2 = getFourNeighbours(street.biruArray[rand2]);
-            Tile streetTile1 = new Tile();
-            Tile streetTile2 = new Tile();
-            foreach(Tile tile in list1){
-                if(tile.tiletype == TileType.Road && tile.streetId == street.id){
-                    streetTile1 = tile;
-                }
-            }
-            foreach(Tile tile in list2){
-                if(tile.tiletype == TileType.Road && tile.streetId == street.id){
-                    streetTile2 = tile;
-                }
-            }
-            Debug.Log($"Got two points at street:{streetTile1.streetId},{streetTile2.streetId}");
-            Debug.Log($"Points are at x:{streetTile1.x}, y:{streetTile1.y} and x:{streetTile2.x}, y:{streetTile2.y}");
-            tiles[0] = streetTile1;
-            tiles[1] = streetTile2;
-            return tiles;
-        }
-        else{
-            return null;
+        Debug.Log($"Path count is {path.Count}");
+        Debug.Log("To get to target go to");
+        int step = 1;
+        foreach(Tile tile in path){
+            Debug.Log($"Step {step} - x:{tile.x}, y:{tile.y}");
+            step++;
         }
 
     }
+    public Tile getSpawn(Street street){
+        int rand1 = RandomU.Range(0,street.biruArray.Count);
+        while(street.biruArray[rand1].canSpawnCar == false ){
+            rand1 = RandomU.Range(0,street.biruArray.Count);
+        }
+        List<Tile> list1 = getFourNeighbours(street.biruArray[rand1]);
+        int rand2 = RandomU.Range(0,list1.Count);
+        Tile streetTile1 = list1[rand2];
+        while(streetTile1.tiletype != TileType.Road || streetTile1.streetId != street.id){
+            rand2 = RandomU.Range(0,list1.Count);
+            streetTile1 = list1[rand2];
+        }
+        return streetTile1;
+    }
+    public Tile getTarget(Street street, Tile spawn){
+        Tile streetTile1;
+        do{
+            int rand1 = RandomU.Range(0,street.biruArray.Count);
+            while(street.biruArray[rand1].canSpawnCar == false ){
+                rand1 = RandomU.Range(0,street.biruArray.Count);
+            }
+            List<Tile> list1 = getFourNeighbours(street.biruArray[rand1]);
+            int rand2 = RandomU.Range(0,list1.Count);
+            streetTile1 = list1[rand2];
+            while(streetTile1.tiletype != TileType.Road || streetTile1.streetId != street.id){
+                rand2 = RandomU.Range(0,list1.Count);
+                streetTile1 = list1[rand2];
+            }
+        }while(streetTile1.x == spawn.x && streetTile1.y == spawn.y);
+        
+        return streetTile1;
+    }
+   
     public List<Tile> getFourNeighbours(Tile tile){
         int[] neighbourX = {0,0,-1,1};
         int[] neighbourY = {1,-1,0,0};
