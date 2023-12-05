@@ -79,6 +79,11 @@ public class Car : MonoBehaviour{
                     UpdateSprite(nextMovement);
                 }
             }
+            
+        }
+        else
+        {
+            // If there are no more waypoints, stop moving
             if (waypoints.Count == 0 && transform.position.x == end.x && transform.position.y == end.y)
             {
                 
@@ -86,11 +91,6 @@ public class Car : MonoBehaviour{
                 Destroy(gameObject); // Uncomment this line to destroy the car GameObject
                 // gameObject.SetActive(false); // Uncomment this line to disable the car GameObject
             }
-        }
-        else
-        {
-            // If there are no more waypoints, stop moving
-
             isMoving = false;
         }
     }
