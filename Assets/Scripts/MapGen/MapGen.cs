@@ -30,19 +30,19 @@ public class MapGen : MonoBehaviour
     private int[,] dirArray;
     public int width;
     public int height;
-    public int scale;
-
     // private void Start(){
     //     height = 128; width = 128; scale = 128;
     //     generateMap();
 
     // }
 
-    public void generateMap(int w, int h, int s)
+    public void generateMap(int w, int h)
     {
-        width = w; height = h; scale = s;
+        perlinClass.width = width;
+        perlinClass.height = height;
+        this.width = w; this.height = h;
         dirArray = new int[,]{{-1,0},{0,1},{1,0},{0,-1}}; 
-        float[,] perlinMap = perlinClass.getPerlinMap(width, height, scale);
+        float[,] perlinMap = perlinClass.getPerlinMap(width, height);
         ConvertFromPerlin(perlinMap);
         removeStraggler();//removes little one tile pokey in things
         IdentifyDistricts();

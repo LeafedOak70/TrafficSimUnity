@@ -224,7 +224,7 @@ Transform:
   m_GameObject: {fileID: 109733053}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.27, y: 4.52, z: 0}
+  m_LocalPosition: {x: -40.7, y: -14.4, z: 0}
   m_LocalScale: {x: 8, y: 8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -264,7 +264,6 @@ MonoBehaviour:
   carSpawner: {fileID: 764375653}
   width: 128
   height: 128
-  scale: 64
   gameList: []
 --- !u!4 &219055349
 Transform:
@@ -451,7 +450,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c3071d0d602553449aab38a04a40129, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  perlinClass: {fileID: 109733054}
   spriteManager: {fileID: 2008378374}
   downtownPrefab: {fileID: 2932482268905503328, guid: 79b07e864a7efef468f0acd240db5659, type: 3}
   urbanPrefab: {fileID: 5734672829795482803, guid: e09eab5ce5013264e965cbe9e2769ec3, type: 3}
@@ -463,7 +461,7 @@ MonoBehaviour:
   generateFromDistricts: 1
   width: 0
   height: 0
-  scale: 0
+  perlinClass: {fileID: 109733054}
 --- !u!4 &1266782120
 Transform:
   m_ObjectHideFlags: 0
