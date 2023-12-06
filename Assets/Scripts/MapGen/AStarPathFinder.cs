@@ -9,6 +9,8 @@
     using RandomU = UnityEngine.Random;
     using System.Linq;
     using UnityEditor.PackageManager;
+    using Utils;
+    
     public class AStarPathFinder
     {
         private List<Tile> mapTiles;
@@ -24,28 +26,31 @@
         {
             // if(startTile.tiletype != TileType.Road){Debug.Log($"This starting tile not road at tile x: {startTile.x} - y: {startTile.y}" );}
             // if(targetTile.tiletype != TileType.Road){Debug.Log($"This end tile not road at tile x: {targetTile.x} - y: {targetTile.y}");}
-            List<Tile> openList = new List<Tile>();
+            PriorityQueue<Tile, int> openList = new PriorityQueue<Tile, int>();
             List<Tile> closedList = new List<Tile>();
-            openList.Add(startTile);
+            // openList.Add(startTile);
+            
             foreach(Tile tile in mapTiles){
                 tile.gCost = 8888888;
                 tile.CalculateFCost();
                 tile.prevTile = null;
+                tile.inSet = false;
             }
             // Debug.Log($"Starting from tile x: {startTile.x} - y: {startTile.y}");
             startTile.gCost = 0;
             startTile.hCost = ManhattanCostEstimate(startTile, targetTile);
             startTile.CalculateFCost();
-            
+            openList.Enqueue(startTile, startTile.fCost);
             while(openList.Count > 0){
-                Tile currentTile = GetTileWithLowestFScore(openList);
+                // Tile currentTile = GetTileWithLowestFScore(openList);
+                Tile currentTile = openList.Dequeue();
                 // Debug.Log($"Checking tile x: {currentTile.x} - y: {currentTile.y}");
                 if(currentTile.x == targetTile.x && currentTile.y == targetTile.y){
                     // Debug.Log($"Reached End as current Tile is at x: {currentTile.x},y: {currentTile.y} nad target is x: {targetTile.x},y: {targetTile.y}");
                     return CalculatePath(currentTile);
                 }
                 
-                openList.Remove(currentTile);
+                // openList.Remove(currentTile);
                 closedList.Add(currentTile);
                 
                 foreach(Tile neighbour in getFourNeighbours(currentTile)){
@@ -69,8 +74,9 @@
                         neighbour.CalculateFCost();
                         // Debug.Log($"Has better g Cost");
 
-                        if(!openList.Contains(neighbour)){
-                            openList.Add(neighbour);
+                        if(neighbour.inSet == false){
+                            openList.Enqueue(neighbour, neighbour.fCost);
+                            neighbour.inSet = true;
                             // Debug.Log($"Adding to dings");
                         }
 

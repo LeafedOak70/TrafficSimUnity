@@ -262,8 +262,8 @@ MonoBehaviour:
   mapGen: {fileID: 1266782119}
   testBool: 1
   carSpawner: {fileID: 764375653}
-  width: 128
-  height: 128
+  width: 80
+  height: 80
   gameList: []
 --- !u!4 &219055349
 Transform:
@@ -402,7 +402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameList: []
-  carObjects: []
+  carPool: []
   width: 0
   height: 0
   carPrefab: {fileID: 1386927480468065559, guid: e84a89def77c669498134e7a7e886c8c, type: 3}
@@ -450,6 +450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c3071d0d602553449aab38a04a40129, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  perlinClass: {fileID: 109733054}
   spriteManager: {fileID: 2008378374}
   downtownPrefab: {fileID: 2932482268905503328, guid: 79b07e864a7efef468f0acd240db5659, type: 3}
   urbanPrefab: {fileID: 5734672829795482803, guid: e09eab5ce5013264e965cbe9e2769ec3, type: 3}
@@ -461,7 +462,6 @@ MonoBehaviour:
   generateFromDistricts: 1
   width: 0
   height: 0
-  perlinClass: {fileID: 109733054}
 --- !u!4 &1266782120
 Transform:
   m_ObjectHideFlags: 0
@@ -546,6 +546,7 @@ MonoBehaviour:
   - {fileID: 6721690, guid: 0121d14c8bbd8d24e86d5ab9ac29aecd, type: 3}
   - {fileID: 1262856952, guid: 0121d14c8bbd8d24e86d5ab9ac29aecd, type: 3}
   - {fileID: -1350401238, guid: 0121d14c8bbd8d24e86d5ab9ac29aecd, type: 3}
+  nothing: {fileID: 21300000, guid: c99d4707f1718c14e8d3d7ce8233222f, type: 3}
 --- !u!4 &2008378375
 Transform:
   m_ObjectHideFlags: 0

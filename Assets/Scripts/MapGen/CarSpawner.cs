@@ -15,11 +15,12 @@ using JetBrains.Annotations;
 public class CarSpawner : MonoBehaviour{
     public List<Street> streetList;
     public List<Tile> gameList;
-    public List<GameObject> carObjects = new List<GameObject>();
+    public List<GameObject> carPool = new List<GameObject>();
     public int width;
     public int height;
     public Tile[,] mapTileData;
     public GameObject carPrefab;
+    int totalCar;
 
 
     public void populizeCity(int width, int height,List<Street> streetL, List<Tile> gameList, Tile[,] mapArr){
@@ -28,13 +29,30 @@ public class CarSpawner : MonoBehaviour{
         this.streetList = streetL;
         this.gameList = gameList;
         mapTileData = mapArr;
-        
-        StartCoroutine(SpawnCarsSlowly());
-        // SpawnCarsSlowly();
+        generatePoolCar();
+
+        SpawnCarsInstantly();
+        // StartCoroutine(SpawnCarsSlowly());
+   
 
     }
 
-    public void spawnCar(Tile start, Tile end){
+    public void generatePoolCar(){
+        totalCar = 0;
+         foreach(Street street in streetList){
+            if(street.biruArray.Count > 10){
+                int carNum = Mathf.CeilToInt(street.biruArray.Count / 10.0f);
+                totalCar += carNum;
+              
+            }
+        }
+        for(int i = 0; i < totalCar; i++){
+            GameObject carObject = Instantiate(carPrefab, Vector3U.zero, QuaternionU.identity);
+            carObject.SetActive(false);
+            carPool.Add(carObject);
+        }
+    }
+    public void spawnCar(Tile start, Tile end, List <Tile> streetArr){
         foreach(Tile tile in gameList){
             if(tile.x == start.x && tile.y == start.y){
                 // Debug.Log($"Start waypoint {tile.vecTopLeft.x}:{tile.vecTopLeft.y}");
@@ -47,22 +65,53 @@ public class CarSpawner : MonoBehaviour{
             }
         }
         List<Tile> path = new List<Tile>();
-        AStarPathFinder aStar = new AStarPathFinder(gameList, width, height); 
+        AStarPathFinder aStar = new AStarPathFinder(streetArr, width, height); 
         path = aStar.FindPath(start, end);
         //Create car
         SpriteManager spriteManager = GameObject.FindObjectOfType<SpriteManager>();
-        GameObject carObject = Instantiate(carPrefab, new Vector3U(start.x, start.y, 0), QuaternionU.identity);
-        carObjects.Add(carObject);
-        Car carComponent = carObject.GetComponent<Car>();
-        carComponent.spriteManager = spriteManager;
-        carComponent.setSprite();
-        carComponent.start = start;
-        carComponent.end = end;
-        carComponent.path = path;
-        carComponent.SpawnAndMove(start,end);
+        GameObject carObject = getCarFromPool();
+        if(carObject != null){
+            Car carComponent = carObject.GetComponent<Car>();
+            carComponent.spriteManager = spriteManager;
+            carComponent.setSprite();
+            carComponent.start = start;
+            carComponent.end = end;
+            carComponent.path = path;
+            carComponent.SpawnAndMove(start,end);
+            carObject.SetActive(true);
+        }
         
     }
+    public GameObject getCarFromPool(){
+        foreach (GameObject carObject in carPool)
+    {
+        if (!carObject.activeInHierarchy)
+        {
+            return carObject;
+        }
+    }
+    return null;
+    }
     // public void SpawnCarsSlowly(){
+        public void SpawnCarsInstantly()
+        {
+            foreach (Street street in streetList)
+            {
+                if (street.biruArray.Count > 10)
+                {
+                    int carNum = Mathf.CeilToInt(street.biruArray.Count / 10.0f);
+                    for (int i = 0; i < carNum; i++)
+                    {
+                        Tile spawnTile = getSpawn(street);
+                        Tile targetTile = getTarget(street, spawnTile);
+                        // Debug.Log($"Got two points at street:{spawnTile.streetId},{targetTile.streetId}");
+                        // Debug.Log($"Points are at x:{spawnTile.x}, y:{spawnTile.y} and x:{targetTile.x}, y:{targetTile.y}");
+                        spawnCar(spawnTile, targetTile, street.streetArray);
+                        // yield return new WaitForSeconds(1.0f);
+                    }
+                }
+            }
+        }
     IEnumerator SpawnCarsSlowly(){
         
         foreach(Street street in streetList){
@@ -73,14 +122,10 @@ public class CarSpawner : MonoBehaviour{
                     Tile targetTile = getTarget(street,spawnTile);
                     // Debug.Log($"Got two points at street:{spawnTile.streetId},{targetTile.streetId}");
                     // Debug.Log($"Points are at x:{spawnTile.x}, y:{spawnTile.y} and x:{targetTile.x}, y:{targetTile.y}");
-                    spawnCar(spawnTile, targetTile);
+                    spawnCar(spawnTile, targetTile, street.streetArray);
                     yield return new WaitForSeconds(1.0f);
                 }
-
             }
-            
-            
-
         }
     }
     

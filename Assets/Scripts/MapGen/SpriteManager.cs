@@ -22,6 +22,7 @@ public class SpriteManager : MonoBehaviour{
     public Sprite errorSprite;
     public Sprite[] carHoriSprites;
     public Sprite[] carVeriSprites;
+    public Sprite nothing;
 
     public Sprite[] getCarSprites(){
         int rand1 = RandomU.Range(0,carHoriSprites.Length);
@@ -29,6 +30,15 @@ public class SpriteManager : MonoBehaviour{
         carS[0] = carHoriSprites[rand1];
         carS[1] = carVeriSprites[rand1];
         return carS;
+    }
+    public void getNothingSprite(Tile tile, SpriteRenderer spriteRenderer){
+        if(tile.districtType == DistrictType.Downtown || tile.districtType == DistrictType.Urban){
+            int randomBiru = RandomU.Range(0,biru.Length);
+            spriteRenderer.sprite = biru[randomBiru];  
+        }else{
+            spriteRenderer.sprite = nothing;
+        }
+        
     }
     public void getBiruSprite(Tile tile, SpriteRenderer spriteRenderer){
         

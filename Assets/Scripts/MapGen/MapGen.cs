@@ -160,6 +160,10 @@ public class MapGen : MonoBehaviour
             if(tile.tiletype == TileType.Building){
                 spriteManager.getBiruSprite(tile, sprite);
             }
+            if(tile.tiletype == TileType.None){
+                
+                spriteManager.getNothingSprite(tile, sprite);
+            }
 
         }
     }
@@ -184,21 +188,42 @@ public class MapGen : MonoBehaviour
         foreach(District district in districtList){
             // Debug.Log($"in {district.districtType}, id {district.id}");
             //find middle tile of district
+                
+                // Debug.Log($"Starting road monster at x: {avgX} : y: {avgY}");
+            if(district.districtType == DistrictType.Downtown){
                 int totalX = 0;
                 int totalY = 0;;
                 foreach(Tile tile in district.tileArray){
-                    totalX += tile.x;
-                    totalY += tile.y;
+                    if(tile.districtType == district.districtType){
+                        totalX += tile.x;
+                        totalY += tile.y;
+                    }
                 }
                 int avgX = totalX/district.tileArray.Count;
                 int avgY = totalY/district.tileArray.Count;
                 Vector2U up = new Vector2U(0,1);
-                // Debug.Log($"Starting road monster at x: {avgX} : y: {avgY}");
-            if(district.districtType == DistrictType.Downtown){
                 roadMonster(avgX, avgY,5,5,up,district.districtType);
             }else if(district.districtType == DistrictType.Urban){
-                Debug.Log($"Starting road monster at Urban at x:{avgX}, y:{avgY}");
-                roadMonster(88, 83,7,7,up,district.districtType);
+                int rand1 = RandomU.Range(0,district.tileArray.Count);
+                int rand2 = RandomU.Range(0,district.tileArray.Count);
+                int rand3 = RandomU.Range(0,district.tileArray.Count);
+                int rand4 = RandomU.Range(0,district.tileArray.Count);
+                Vector2U up = new Vector2U(0,1);
+                Vector2U down = new Vector2U(0,-1);
+                Vector2U right = new Vector2U(1,0);
+                Vector2U left = new Vector2U(-1,0);
+                Tile tile1 = district.tileArray[rand1];
+                Tile tile2 = district.tileArray[rand2];
+                Tile tile3 = district.tileArray[rand3];
+                Tile tile4 = district.tileArray[rand4];
+                Debug.Log($"Starting road monster at Urban at x:{tile1.x}, y:{tile1.y}");
+                Debug.Log($"Starting road monster at Urban at x:{tile2.x}, y:{tile2.y}");
+                Debug.Log($"Starting road monster at Urban at x:{tile3.x}, y:{tile3.y}");
+                Debug.Log($"Starting road monster at Urban at x:{tile4.x}, y:{tile4.y}");
+                roadMonster(tile1.x, tile1.y,7,7,up,district.districtType);
+                roadMonster(tile2.x, tile2.y,7,7,down,district.districtType);
+                roadMonster(tile3.x, tile3.y,7,7,left,district.districtType);
+                roadMonster(tile4.x, tile4.y,7,7,right,district.districtType);
             }
         }
     }
@@ -214,6 +239,9 @@ public class MapGen : MonoBehaviour
         if(districtType != mapTileData[x,y].districtType){
             return;
         }
+        // if(DistrictType.Downtown != mapTileData[x,y].districtType  || DistrictType.Urban != mapTileData[x,y].districtType){
+        //     return;
+        //  }
         if(mapTileData[x,y].canRoad == false || mapTileData[x,y].tiletype == TileType.Road){
             return;
         }

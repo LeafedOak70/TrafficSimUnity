@@ -11,7 +11,7 @@ using System.Linq;
 using UnityEditor.PackageManager;
 
 public class Car : MonoBehaviour{
-    public float speed = 1f;
+    public float speed = 100f;
     public float rotationSpeed = 180f;
     public Sprite horizontalSprite;
     public Sprite verticalSprite;
@@ -84,12 +84,14 @@ public class Car : MonoBehaviour{
         else
         {
             // If there are no more waypoints, stop moving
-            if (waypoints.Count == 0 && transform.position.x == end.x && transform.position.y == end.y)
+            if (waypoints.Count == 0)
             {
                 
 
-                Destroy(gameObject); // Uncomment this line to destroy the car GameObject
-                // gameObject.SetActive(false); // Uncomment this line to disable the car GameObject
+                 Debug.Log($"Car reached destination. At {end.x}:{end.y}");
+
+                // Set the GameObject inactive
+                gameObject.SetActive(false);
             }
             isMoving = false;
         }

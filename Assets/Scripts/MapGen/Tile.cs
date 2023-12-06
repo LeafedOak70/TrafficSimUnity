@@ -38,6 +38,7 @@ public class Tile : MonoBehaviour{
     public Vector3U vecTopRight;
     public Vector3U vecBottomLeft;
     public Vector3U vecBottomRight;
+    public bool inSet = false;
 
     public Tile(){
         this.visited = false;
