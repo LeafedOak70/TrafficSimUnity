@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 109733055}
   - component: {fileID: 109733054}
   m_Layer: 0
-  m_Name: Quad (1)
+  m_Name: Perlin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,7 +160,7 @@ MonoBehaviour:
   octaves: 6
   persistence: 0.5
   lacunarity: 2
-  seed: 6
+  seed: 20
   toggleDistrict: 1
   downtownThreshold: 0.3
   urbanThreshold: 0.4

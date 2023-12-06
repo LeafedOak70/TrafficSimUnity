@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PerlinNoiseGenerator : MonoBehaviour
@@ -15,6 +16,9 @@ public class PerlinNoiseGenerator : MonoBehaviour
     public float urbanThreshold = 0.6f;
     public float ruralThreshold = 0.8f;
 
+    private void Update(){
+        createTexture();
+    }
     private void createTexture()
     {
         Renderer renderer = GetComponent<Renderer>();
