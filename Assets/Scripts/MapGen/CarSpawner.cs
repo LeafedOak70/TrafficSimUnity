@@ -31,7 +31,7 @@ public class CarSpawner : MonoBehaviour{
         mapTileData = mapArr;
         generatePoolCar();
 
-        // SpawnCarsInstantly();
+        SpawnCarsInstantly();
         StartCoroutine(SpawnCarsSlowly());
    
 

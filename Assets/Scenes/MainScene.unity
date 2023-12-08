@@ -160,7 +160,7 @@ MonoBehaviour:
   octaves: 6
   persistence: 0.5
   lacunarity: 2
-  seed: 20
+  seed: 6
   toggleDistrict: 1
   downtownThreshold: 0.3
   urbanThreshold: 0.4

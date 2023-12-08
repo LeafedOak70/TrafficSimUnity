@@ -190,6 +190,7 @@ public class MapGen : MonoBehaviour
             //find middle tile of district
                 
                 // Debug.Log($"Starting road monster at x: {avgX} : y: {avgY}");
+                int spawnNum = 3;
             if(district.districtType == DistrictType.Downtown){
                 int totalX = 0;
                 int totalY = 0;;
@@ -202,7 +203,7 @@ public class MapGen : MonoBehaviour
                 int avgX = totalX/district.tileArray.Count;
                 int avgY = totalY/district.tileArray.Count;
                 Vector2U up = new Vector2U(0,1);
-                roadMonster(avgX, avgY,5,5,up,district.districtType);
+                roadMonster(avgX, avgY,5,5,up,district.districtType,spawnNum);
             }else if(district.districtType == DistrictType.Urban){
                 int rand1 = RandomU.Range(0,district.tileArray.Count);
                 int rand2 = RandomU.Range(0,district.tileArray.Count);
@@ -220,14 +221,14 @@ public class MapGen : MonoBehaviour
                 Debug.Log($"Starting road monster at Urban at x:{tile2.x}, y:{tile2.y}");
                 Debug.Log($"Starting road monster at Urban at x:{tile3.x}, y:{tile3.y}");
                 Debug.Log($"Starting road monster at Urban at x:{tile4.x}, y:{tile4.y}");
-                roadMonster(tile1.x, tile1.y,7,7,up,district.districtType);
-                roadMonster(tile2.x, tile2.y,7,7,down,district.districtType);
-                roadMonster(tile3.x, tile3.y,7,7,left,district.districtType);
-                roadMonster(tile4.x, tile4.y,7,7,right,district.districtType);
+                roadMonster(tile1.x, tile1.y,7,7,up,district.districtType,spawnNum);
+                roadMonster(tile2.x, tile2.y,7,7,down,district.districtType,spawnNum);
+                roadMonster(tile3.x, tile3.y,7,7,left,district.districtType,spawnNum);
+                roadMonster(tile4.x, tile4.y,7,7,right,district.districtType,spawnNum);
             }
         }
     }
-    void roadMonster(int x, int y, int timerL, int timerR, Vector2U vector, DistrictType districtType){
+    void roadMonster(int x, int y, int timerL, int timerR, Vector2U vector, DistrictType districtType, int spawnNum){
         //check whether visiting tile is valid
         // Debug.Log($"x: {x}, y: {y}, timerL: {timerL}, timerR: {timerR}");
         // Debug.Log($"vec ATS TART: ({vector.x}, {vector.y})");
@@ -266,7 +267,7 @@ public class MapGen : MonoBehaviour
             timerR -=2;
         }
         //Reset timer and create new branch in new direction
-        if(timerL < 1){
+        if(timerL < 1 && spawnNum > 0){
             timerL=5;
             Vector2U vecLeft = getVector(vector,0);
             // Debug.Log($"vec before getVector: ({vector.x}, {vector.y})");
@@ -274,7 +275,8 @@ public class MapGen : MonoBehaviour
             // Debug.Log($"COORDS before getVector: ({x}, {y})");
             // Debug.Log($"COORDS after getVector: ({x+(int)vecLeft.x}, {y+(int)vecLeft.y})");
             //mapTileData[x+(int)vecLeft.x,y+(int)vecLeft.y].tiletype = TileType.Road;
-            roadMonster(x+(int)vecLeft.x,y+(int)vecLeft.y,5, 5,vecLeft,districtType);
+            spawnNum--;
+            roadMonster(x+(int)vecLeft.x,y+(int)vecLeft.y,5, 5,vecLeft,districtType,spawnNum);
         }else{
             //set left tile to not become road
             Vector2U vecLeft = getVector(vector,0);
@@ -284,12 +286,13 @@ public class MapGen : MonoBehaviour
             mapTileData[leftX,leftY].canRoad = false;
             mapTileData[leftX,leftY].tiletype = TileType.Building;
         }
-        if(timerR < 1){
+        if(timerR < 1 && spawnNum > 0){
             timerR=5;
             Vector2U vecRight = getVector(vector,1);//0 for get left
             // Debug.Log("MAKE RIGHT ROAD NO");
             //mapTileData[x+(int)vecRight.x,y+(int)vecRight.y].tiletype = TileType.Road;
-            roadMonster(x+(int)vecRight.x,y+(int)vecRight.y,5, 5,vecRight,districtType);
+            spawnNum--;
+            roadMonster(x+(int)vecRight.x,y+(int)vecRight.y,5, 5,vecRight,districtType,spawnNum);
         }else{
             //set right tile to not become road
             Vector2U vecRight = getVector(vector,1);//0 for get left
@@ -302,7 +305,8 @@ public class MapGen : MonoBehaviour
         int newY = y+(int)vector.y;
         // Debug.Log($"NEWx: {newX}, NEWy: {newY}, timerL: {timerL}, timerR: {timerR}");
         // Debug.Log($"vec at END: ({vector.x}, {vector.y})");
-        roadMonster(newX,newY,timerL, timerR,vector,districtType);
+        spawnNum = 3;
+        roadMonster(newX,newY,timerL, timerR,vector,districtType,spawnNum);
 
 
     }
