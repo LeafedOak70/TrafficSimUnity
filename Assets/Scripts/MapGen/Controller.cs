@@ -30,15 +30,17 @@ public class Controller : MonoBehaviour{
 
     private void Awake(){
         streetList = new List<Street>();
+        startMap();
+    }
+    public void startMap(){
         mapGen.generateMap(width, height);
         mapArray = mapGen.mapTileData;
         gameList = mapGen.getGameTiles().Cast<Tile>().ToList();
         streetList = getStreets(gameList);
-        
         carSpawner.populizeCity(width, height, streetList, gameList, mapArray);
-
-
     }
+    public int GetWidth(){return width;}
+    public int GetHeight(){return height;}
     public List<Street> getStreets(List<Tile> gameTiles){
         //sort all street tiles into array first
         List<Street> listOStreets = new List<Street>();
