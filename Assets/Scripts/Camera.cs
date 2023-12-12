@@ -14,18 +14,19 @@ public class CameraDrag : MonoBehaviour
 
     void HandleInput()
     {
+        Camera camera = GetComponent<Camera>();
         if (Input.GetMouseButtonDown(0))
         {
-            dragOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            dragOrigin = camera.ScreenToWorldPoint(Input.mousePosition);
         }
 
         if (Input.GetMouseButton(0))
         {
-            Vector3 difference = dragOrigin - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 difference = dragOrigin - camera.ScreenToWorldPoint(Input.mousePosition);
             transform.position += difference;
         }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - scroll * zoomSpeed, minZoom, maxZoom);
+        camera.orthographicSize = Mathf.Clamp(camera.orthographicSize - scroll * zoomSpeed, minZoom, maxZoom);
     }
 }

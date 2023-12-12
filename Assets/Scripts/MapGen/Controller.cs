@@ -20,24 +20,39 @@ public class Controller : MonoBehaviour{
     // public PerlinNoiseGenerator perlinGen;
     public bool testBool;
     public CarSpawner carSpawner;
-    public int width;
-    public int height;
+    private int width;
+    private int height;
     public List<Tile> gameList;
     public List<Street> streetList;
     public Tile[,] mapArray;
+    public Camera uiCamera;
+    public Camera gameCamera;
     
 
 
     private void Awake(){
         streetList = new List<Street>();
-        startMap();
+        // startMap();
     }
-    public void startMap(){
+    public void startMap(int w, int h){
+        width = w;
+        height = h;
         mapGen.generateMap(width, height);
         mapArray = mapGen.mapTileData;
         gameList = mapGen.getGameTiles().Cast<Tile>().ToList();
         streetList = getStreets(gameList);
         carSpawner.populizeCity(width, height, streetList, gameList, mapArray);
+    }
+    public void changeCamera(){
+        uiCamera.gameObject.SetActive(false);
+        gameCamera.gameObject.SetActive(true);
+        float middleX = width * 0.5f;
+        float middleY = height * 0.5f;
+        float cameraZ = -10f; // Adjust this value based on your scene setup
+
+        Vector3U targetPosition = new Vector3U(middleX, middleY, cameraZ);
+        gameCamera.transform.position = targetPosition;
+
     }
     public int GetWidth(){return width;}
     public int GetHeight(){return height;}
