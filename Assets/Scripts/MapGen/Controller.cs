@@ -12,6 +12,7 @@ using UnityEditor.PackageManager;
 using Unity.VisualScripting;
 using JetBrains.Annotations;
 using UnityEditor.Build.Content;
+using UnityEditor;
 
 public class Controller : MonoBehaviour{
     public MapGen mapGen;
@@ -22,6 +23,7 @@ public class Controller : MonoBehaviour{
     public CarSpawner carSpawner;
     private int width;
     private int height;
+    private int seed;
     public List<Tile> gameList;
     public List<Street> streetList;
     public Tile[,] mapArray;
@@ -34,10 +36,11 @@ public class Controller : MonoBehaviour{
         streetList = new List<Street>();
         // startMap();
     }
-    public void startMap(int w, int h){
+    public void startMap(int w, int h, int s){
         width = w;
         height = h;
-        mapGen.generateMap(width, height);
+        seed = s;
+        mapGen.generateMap(width, height , seed);
         mapArray = mapGen.mapTileData;
         gameList = mapGen.getGameTiles().Cast<Tile>().ToList();
         streetList = getStreets(gameList);

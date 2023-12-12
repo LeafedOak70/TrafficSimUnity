@@ -36,10 +36,12 @@ public class MapGen : MonoBehaviour
 
     // }
 
-    public void generateMap(int w, int h)
+    public void generateMap(int w, int h, int s)
     {
         perlinClass.width = width;
         perlinClass.height = height;
+        perlinClass.seed = s;
+
         this.width = w; this.height = h;
         dirArray = new int[,]{{-1,0},{0,1},{1,0},{0,-1}}; 
         float[,] perlinMap = perlinClass.getPerlinMap(width, height);
@@ -160,10 +162,10 @@ public class MapGen : MonoBehaviour
             if(tile.tiletype == TileType.Building){
                 spriteManager.getBiruSprite(tile, sprite);
             }
-            if(tile.tiletype == TileType.None){
+            // if(tile.tiletype == TileType.None){
                 
-                spriteManager.getNothingSprite(tile, sprite);
-            }
+            //     spriteManager.getNothingSprite(tile, sprite);
+            // }
 
         }
     }
