@@ -46,6 +46,7 @@ public class CarSpawner : MonoBehaviour{
               
             }
         }
+        totalCar += 1200;
         for(int i = 0; i < totalCar; i++){
             GameObject carObject = Instantiate(carPrefab, Vector3U.zero, QuaternionU.identity);
             carObject.name = "Car "+ i;
@@ -115,7 +116,7 @@ public class CarSpawner : MonoBehaviour{
                 if (street.biruArray.Count > 10)
                 {
                     int carNum = Mathf.CeilToInt(street.biruArray.Count / 10.0f);
-                    for (int i = 0; i < carNum; i++)
+                    for (int i = 0; i < 500; i++)
                     {
                         Tile spawnTile = getSpawn(street);
                         Tile targetTile = getTarget(street, spawnTile);
@@ -138,7 +139,7 @@ public class CarSpawner : MonoBehaviour{
                     // Debug.Log($"Got two points at street:{spawnTile.streetId},{targetTile.streetId}");
                     // Debug.Log($"Points are at x:{spawnTile.x}, y:{spawnTile.y} and x:{targetTile.x}, y:{targetTile.y}");
                     spawnCar(spawnTile, targetTile, street.streetArray);
-                    yield return new WaitForSeconds(1.0f);
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
         }

@@ -53,10 +53,11 @@ public class Car : MonoBehaviour{
             
         }else if(!isMoving){
 
-            gameObject.SetActive(false);
+            StartCoroutine(Die());
             // if(reachedDestination){
             //     gameObject.SetActive(false);
             // }
+
         }
     }
     public void SpawnAndMove(Tile start, Tile end)
@@ -148,6 +149,11 @@ public class Car : MonoBehaviour{
     int checkDecimal(string s){
         int decimalPointIndex = s.IndexOf('.');
         return decimalPointIndex < 0 ? 0 : s.Length - decimalPointIndex - 1;
+    }
+    IEnumerator Die(){
+        speed = 0;
+        yield return new WaitForSeconds(second);
+        gameObject.SetActive(false);
     }
     IEnumerator PauseForSeconds( )
     {
