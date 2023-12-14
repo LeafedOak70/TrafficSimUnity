@@ -11,7 +11,11 @@ using System.Linq;
 using UnityEditor.PackageManager;
 
 public class Car : MonoBehaviour{
+<<<<<<< Updated upstream
     public float speed = 1f;
+=======
+    public float speed = 10f;
+>>>>>>> Stashed changes
     public float rotationSpeed = 180f;
     public Sprite horizontalSprite;
     public Sprite verticalSprite;
@@ -22,12 +26,26 @@ public class Car : MonoBehaviour{
     public List<Tile> path;
     public Tile start;
     public Tile end;
+<<<<<<< Updated upstream
     public Vector3U direction;
     public List<Vector3U> waypoints = new List<Vector3U>();
     public bool reachedDestination = false; 
 
     
     private void Awake(){
+=======
+    private Rigidbody2D rb2d;
+    private BoxCollider2D boxCollider;
+    public Vector3U direction;
+    public List<Vector3U> waypoints = new List<Vector3U>();
+
+
+    
+    private void Awake(){
+        rb2d = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
+        rb2d.gravityScale = 0f; // Disable gravity for 2D physics
+>>>>>>> Stashed changes
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingOrder = 10000;
         if (spriteManager != null)
@@ -37,11 +55,20 @@ public class Car : MonoBehaviour{
     }
     
     
+<<<<<<< Updated upstream
     void Update(){
         if(isMoving){
             MoveToDestination();
         }else if(!isMoving){
             gameObject.SetActive(false);
+=======
+    void Update()
+    {
+        if (isMoving)
+        {    
+             MoveToDestination(); 
+              
+>>>>>>> Stashed changes
         }
     }
     public void SpawnAndMove(Tile start, Tile end)
@@ -67,7 +94,12 @@ public class Car : MonoBehaviour{
             float distanceToWaypoint = Vector3U.Distance(currentPosition, targetWaypoint);
 
             // Move towards the waypoint
+<<<<<<< Updated upstream
             transform.Translate(directionToWaypoint * speed * Time.deltaTime);
+=======
+            Vector2U velocity = directionToWaypoint * speed;
+            rb2d.velocity = velocity;
+>>>>>>> Stashed changes
 
             // Check if the car has reached the waypoint
             if (distanceToWaypoint < 0.1f)
@@ -98,6 +130,11 @@ public class Car : MonoBehaviour{
         }
     }
 
+<<<<<<< Updated upstream
+=======
+   
+
+>>>>>>> Stashed changes
     void generateWaypoint()
     {
         for(int i =1; i < path.Count-1; i++){
@@ -106,6 +143,11 @@ public class Car : MonoBehaviour{
         }
         
     }
+<<<<<<< Updated upstream
+=======
+    
+    
+>>>>>>> Stashed changes
     void addWaypoints(Tile prevTile, Tile currTile, Tile nextTile){
         Vector2U cameFrom = getDirection(prevTile,currTile);
         Vector2U goingTo = getDirection(currTile,nextTile);
@@ -180,6 +222,7 @@ public class Car : MonoBehaviour{
     {
         // Debug.Log($"Spawning a car at {newPosition.x}:{newPosition.y}");
         transform.position = new Vector3U(newPosition.x, newPosition.y, transform.position.z);
+        rb2d.velocity = direction * speed;
     }
     Vector3U getWaypointwithDirection(Vector2U dir, Tile tile){
         Vector3U returnPoint = new Vector3U();
@@ -234,11 +277,13 @@ public class Car : MonoBehaviour{
         {
             // Moving horizontally
             spriteRenderer.sprite = horizontalSprite;
+            boxCollider.size = new Vector2U(0.19f, 0.19f);
         }
         else
         {
             // Moving vertically
             spriteRenderer.sprite = verticalSprite;
+            boxCollider.size = new Vector2U(0.19f, 0.25f);
         }
     }
 
