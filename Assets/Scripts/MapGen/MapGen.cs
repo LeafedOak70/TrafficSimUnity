@@ -162,10 +162,10 @@ public class MapGen : MonoBehaviour
             if(tile.tiletype == TileType.Building){
                 spriteManager.getBiruSprite(tile, sprite);
             }
-            // if(tile.tiletype == TileType.None){
+            if(tile.tiletype == TileType.None){
                 
-            //     spriteManager.getNothingSprite(tile, sprite);
-            // }
+                spriteManager.getNothingSprite(tile, sprite);
+            }
 
         }
     }

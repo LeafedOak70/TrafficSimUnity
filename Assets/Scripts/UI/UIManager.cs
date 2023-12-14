@@ -9,27 +9,33 @@ public class UIManager : MonoBehaviour
 
     public Slider seedSlider;
     public Button generateMapButton;
+    public Button districtToggle;
     private PerlinNoiseGenerator perlin;
+    private bool districtBool = true;
     
 
     private void Start()
     {
-        GameObject perlinObject = new GameObject("PerlinNoiseGenerator");
-        perlin = perlinObject.AddComponent<PerlinNoiseGenerator>();
-        perlin.toggleDistrict = true;
 
         widthInputField.text = "128";
         seedInput.text = "6";
-
+ 
         generateMapButton.onClick.AddListener(GenerateMap);
         widthSlider.onValueChanged.AddListener(OnWidthValueChanged);
         seedSlider.onValueChanged.AddListener(OnSeedValueChanged);
+        districtToggle.onClick.AddListener(ToggleDistrict);
 
+        GameObject perlinObject = new GameObject("PerlinNoiseGenerator");
+        perlin = perlinObject.AddComponent<PerlinNoiseGenerator>();
+        perlin.toggleDistrict = districtBool;
         perlin.setWidthHeight(int.Parse(widthInputField.text));
         perlin.setSeed(int.Parse(seedInput.text));
         GameObject targetObject = GameObject.Find("PerlinMinimap");
         Renderer renderer = targetObject.GetComponent<Renderer>();
         perlin.setRenderer(renderer);
+        
+
+        
 
 
     }
@@ -37,6 +43,14 @@ public class UIManager : MonoBehaviour
         perlin.setWidthHeight(int.Parse(widthInputField.text));
         perlin.setSeed(int.Parse(seedInput.text));
         perlin.createTexture();
+    }
+    private void ToggleDistrict(){
+        if(districtBool == true){
+            districtBool = false;
+        }else{
+            districtBool = true;
+        }
+        perlin.toggleDistrict = districtBool;
     }
      private void OnSeedValueChanged(float value)
     {

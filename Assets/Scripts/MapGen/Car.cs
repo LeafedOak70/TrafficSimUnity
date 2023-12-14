@@ -22,11 +22,18 @@ public class Car : MonoBehaviour{
     public List<Tile> path;
     public Tile start;
     public Tile end;
+    private Rigidbody2D rb2d;
     public Vector3U direction;
     public List<Vector3U> waypoints = new List<Vector3U>();
+    private bool isStopTimerActive = false;
+    private float stopTimerDuration = 2f;
+    private float stopTimer;
+    private bool hasStartedMoving = false;
 
     
     private void Awake(){
+        rb2d = GetComponent<Rigidbody2D>();
+        rb2d.gravityScale = 0f; // Disable gravity for 2D physics
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingOrder = 10000;
         if (spriteManager != null)
@@ -36,9 +43,32 @@ public class Car : MonoBehaviour{
     }
     
     
-    void Update(){
-        if(isMoving){
-            MoveToDestination();
+    void Update()
+    {
+        if (isMoving)
+        {
+            if (!hasStartedMoving)
+            {
+                // Delay the initial collision check to avoid immediate stopping upon spawning
+                hasStartedMoving = true;
+            }
+            else if (!isStopTimerActive)
+            {
+                CheckCollision();  // Check for collision before moving
+                MoveToDestination();
+            }
+            else
+            {
+                // Update the timer
+                stopTimer -= Time.deltaTime;
+
+                // If the timer has elapsed, resume movement
+                if (stopTimer <= 0f)
+                {
+                    isStopTimerActive = false;
+                    stopTimer = 0f; // Reset the timer
+                }
+            }
         }
     }
     public void SpawnAndMove(Tile start, Tile end)
@@ -57,15 +87,18 @@ public class Car : MonoBehaviour{
         {
 
             Vector3U targetWaypoint = waypoints[0];
-            Vector3U currentPosition = transform.position;
+            Vector3U currentPosition = rb2d.position;
 
             // Calculate the direction and distance to the target waypoint
             Vector3U directionToWaypoint = (targetWaypoint - currentPosition).normalized;
             float distanceToWaypoint = Vector3U.Distance(currentPosition, targetWaypoint);
 
             // Move towards the waypoint
-            transform.Translate(directionToWaypoint * speed * Time.deltaTime);
+            rb2d.MovePosition(new Vector3U(rb2d.position.x, rb2d.position.y) + directionToWaypoint * speed * Time.deltaTime);
 
+
+
+            
             // Check if the car has reached the waypoint
             if (distanceToWaypoint < 0.1f)
             {
@@ -88,12 +121,33 @@ public class Car : MonoBehaviour{
             {
                 
 
-                 Debug.Log($"Car reached destination. At {end.x}:{end.y}");
+                //  Debug.Log($"Car reached destination. At {end.x}:{end.y}");
 
                 // Set the GameObject inactive
                 gameObject.SetActive(false);
             }
             isMoving = false;
+        }
+    }
+
+   void CheckCollision()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, rb2d.velocity.normalized, 1f);
+
+        if (hit.collider != null && hit.collider.CompareTag("Car"))
+        {
+            // Stop the car
+            rb2d.velocity = Vector2U.zero;
+
+            // Optionally, adjust the car's orientation
+            Vector2U currentDirection = rb2d.velocity.normalized;
+            float angle = Mathf.Atan2(currentDirection.y, currentDirection.x) * Mathf.Rad2Deg;
+            QuaternionU targetRotation = QuaternionU.AngleAxis(angle, Vector3U.forward);
+            transform.rotation = targetRotation;
+
+            // Start the stop timer
+            isStopTimerActive = true;
+            stopTimer = stopTimerDuration;
         }
     }
 
@@ -105,6 +159,16 @@ public class Car : MonoBehaviour{
         }
         
     }
+     void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Car"))
+        {
+            // Adjust the position to avoid collision
+            Vector2U avoidDirection = (rb2d.position - (Vector2U)collision.transform.position).normalized;
+            rb2d.MovePosition(rb2d.position + avoidDirection * speed * Time.deltaTime);
+        }
+    }
+    
     void addWaypoints(Tile prevTile, Tile currTile, Tile nextTile){
         Vector2U cameFrom = getDirection(prevTile,currTile);
         Vector2U goingTo = getDirection(currTile,nextTile);

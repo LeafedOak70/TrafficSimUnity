@@ -74,6 +74,8 @@ public class CarSpawner : MonoBehaviour{
             Car carComponent = carObject.GetComponent<Car>();
             carComponent.spriteManager = spriteManager;
             carComponent.setSprite();
+            float speed = RandomU.Range(1,3);
+            carComponent.speed = speed;
             carComponent.start = start;
             carComponent.end = end;
             carComponent.path = path;
