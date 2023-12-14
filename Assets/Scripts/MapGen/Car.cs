@@ -101,9 +101,13 @@ public class Car : MonoBehaviour{
                 if(waypoints.Count > 1){
                     Vector3U nextWaypoint = waypoints[1];
                     float wayPoint = nextWaypoint.x;
-                    bool hasThree = Mathf.Approximately(wayPoint - Mathf.Floor(wayPoint * 1000) / 1000, 0f);
-                    if(hasThree){
-                        Debug.Log($"3 Decimals {wayPoint} :");
+                    
+                    string wayString = wayPoint.ToString();
+                    Debug.Log($"Checking {wayPoint} : {wayString}");
+                    string[] a = wayString.Split(new char[] { '.' });
+                    int decimals = a[1].Length;
+                    if(decimals == 3){
+                        Debug.Log($"{wayPoint} has 3");
                         atIntersection = true;
                     }
                 }
