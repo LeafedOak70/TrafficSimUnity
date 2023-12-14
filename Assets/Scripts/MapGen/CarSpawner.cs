@@ -48,6 +48,7 @@ public class CarSpawner : MonoBehaviour{
         }
         for(int i = 0; i < totalCar; i++){
             GameObject carObject = Instantiate(carPrefab, Vector3U.zero, QuaternionU.identity);
+            carObject.name = "Car "+ i;
             carObject.SetActive(false);
             carPool.Add(carObject);
         }
@@ -74,8 +75,19 @@ public class CarSpawner : MonoBehaviour{
             Car carComponent = carObject.GetComponent<Car>();
             carComponent.spriteManager = spriteManager;
             carComponent.setSprite();
-            float speed = RandomU.Range(1,3);
+            float randomNumber = UnityEngine.Random.Range(0f, 1f);
+            float roundedNumber = Mathf.Round(randomNumber * 100f) / 100f;
+            float speed = 0;
+            if(roundedNumber < 0.2){
+                speed=0.5f;
+            }
+            else if(roundedNumber < 0.7){
+                speed = 1;
+            }else {
+                speed = 2;
+            }
             carComponent.speed = speed;
+            carComponent.initSpeed = speed;
             carComponent.start = start;
             carComponent.end = end;
             carComponent.path = path;

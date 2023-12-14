@@ -11,8 +11,10 @@ using System.Linq;
 using UnityEditor.PackageManager;
 
 public class Car : MonoBehaviour{
-    public float speed = 100f;
+    public float speed = 1f;
+    public float initSpeed;
     public float rotationSpeed = 180f;
+    public int id;
     public Sprite horizontalSprite;
     public Sprite verticalSprite;
     private SpriteRenderer spriteRenderer;
@@ -22,53 +24,39 @@ public class Car : MonoBehaviour{
     public List<Tile> path;
     public Tile start;
     public Tile end;
-    private Rigidbody2D rb2d;
     public Vector3U direction;
     public List<Vector3U> waypoints = new List<Vector3U>();
-    private bool isStopTimerActive = false;
-    private float stopTimerDuration = 2f;
-    private float stopTimer;
-    private bool hasStartedMoving = false;
+    public bool reachedDestination = false; 
+    private BoxCollider2D boxCollider;
+    public bool atIntersection = false;
+    // private int second = 10;
 
     
+    
     private void Awake(){
-        rb2d = GetComponent<Rigidbody2D>();
-        rb2d.gravityScale = 0f; // Disable gravity for 2D physics
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingOrder = 10000;
-        if (spriteManager != null)
-        {
-            setSprite();
-        }
+        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider.isTrigger = true;
+        
     }
     
     
-    void Update()
-    {
-        if (isMoving)
-        {
-            if (!hasStartedMoving)
-            {
-                // Delay the initial collision check to avoid immediate stopping upon spawning
-                hasStartedMoving = true;
-            }
-            else if (!isStopTimerActive)
-            {
-                CheckCollision();  // Check for collision before moving
+    void Update(){
+        if(isMoving){
+            // speed = initSpeed;
+            if(atIntersection){
+                speed = 0;
+            }else{
                 MoveToDestination();
             }
-            else
-            {
-                // Update the timer
-                stopTimer -= Time.deltaTime;
+            
+        }else if(!isMoving){
 
-                // If the timer has elapsed, resume movement
-                if (stopTimer <= 0f)
-                {
-                    isStopTimerActive = false;
-                    stopTimer = 0f; // Reset the timer
-                }
-            }
+            gameObject.SetActive(false);
+            // if(reachedDestination){
+            //     gameObject.SetActive(false);
+            // }
         }
     }
     public void SpawnAndMove(Tile start, Tile end)
@@ -87,21 +75,38 @@ public class Car : MonoBehaviour{
         {
 
             Vector3U targetWaypoint = waypoints[0];
-            Vector3U currentPosition = rb2d.position;
+            Vector3U currentPosition = transform.position;
+            
+            // Tile currentTile = GetTileAtPosition(currentPosition);
+            // Tile nextTile = GetTileAtPosition(targetWaypoint);
+            // if(currentTile != null && nextTile != null){
+            //     if(currentTile.tiletype == TileType.Road && nextTile.tiletype == TileType.Road){
+            //         if(currentTile.roadType != RoadType.Four && nextTile.roadType == RoadType.Four){
+            //             Debug.Log($"Stopping before intersection : {gameObject.name}");
+            //             StartCoroutine(PauseForSeconds());
+            //         }
+            //     }
+            // }
 
             // Calculate the direction and distance to the target waypoint
             Vector3U directionToWaypoint = (targetWaypoint - currentPosition).normalized;
             float distanceToWaypoint = Vector3U.Distance(currentPosition, targetWaypoint);
 
             // Move towards the waypoint
-            rb2d.MovePosition(new Vector3U(rb2d.position.x, rb2d.position.y) + directionToWaypoint * speed * Time.deltaTime);
+            transform.Translate(directionToWaypoint * speed * Time.deltaTime);
 
-
-
-            
             // Check if the car has reached the waypoint
             if (distanceToWaypoint < 0.1f)
             {
+                if(waypoints.Count > 1){
+                    Vector3U nextWaypoint = waypoints[1];
+                    float wayPoint = nextWaypoint.x;
+                    bool hasThree = Mathf.Approximately(wayPoint - Mathf.Floor(wayPoint * 1000) / 1000, 0f);
+                    if(hasThree){
+                        Debug.Log($"3 Decimals {wayPoint} :");
+                        atIntersection = true;
+                    }
+                }
                 // Remove the reached waypoint from the list
                 waypoints.RemoveAt(0);
 
@@ -116,59 +121,82 @@ public class Car : MonoBehaviour{
         }
         else
         {
-            // If there are no more waypoints, stop moving
-            if (waypoints.Count == 0)
+            if (waypoints.Count == 0 && transform.position.x == end.x && transform.position.y == end.y)
             {
-                
-
-                //  Debug.Log($"Car reached destination. At {end.x}:{end.y}");
-
-                // Set the GameObject inactive
-                gameObject.SetActive(false);
+                Debug.Log("Stopping at destination");
+                // StartCoroutine(PauseForSeconds());
+                reachedDestination  =true;
+                // Destroy(gameObject); // Uncomment this line to destroy the car GameObject
+                gameObject.SetActive(false); // Uncomment this line to disable the car GameObject
             }
+            // If there are no more waypoints, stop moving
+            // reachedDestination  =true;
             isMoving = false;
         }
     }
+    int checkDecimal(string s){
+        int decimalPointIndex = s.IndexOf('.');
+        return decimalPointIndex < 0 ? 0 : s.Length - decimalPointIndex - 1;
+    }
+    // IEnumerator PauseForSeconds( )
+    // {
+    //     // Pause for the specified duration
+    //     isMoving = false;
+    //     yield return new WaitForSeconds(second);
+    //     isMoving = true;
+    // }
+    // public Tile GetTileAtPosition(Vector3U pos){
+    //     foreach(Tile tile in path){
+    //         foreach(Vector3U waypoint in tile.wayPoints){
+    //             if(waypoint.x == pos.x && waypoint.y == pos.y){
+    //                 return tile;
+    //             }
+    //         }
+    //     }
+    //     return null;
 
-   void CheckCollision()
+    // }
+    void OnTriggerExit2D(Collider2D other)
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, rb2d.velocity.normalized, 1f);
-
-        if (hit.collider != null && hit.collider.CompareTag("Car"))
+        if (other.CompareTag("Car"))
         {
-            // Stop the car
-            rb2d.velocity = Vector2U.zero;
-
-            // Optionally, adjust the car's orientation
-            Vector2U currentDirection = rb2d.velocity.normalized;
-            float angle = Mathf.Atan2(currentDirection.y, currentDirection.x) * Mathf.Rad2Deg;
-            QuaternionU targetRotation = QuaternionU.AngleAxis(angle, Vector3U.forward);
-            transform.rotation = targetRotation;
-
-            // Start the stop timer
-            isStopTimerActive = true;
-            stopTimer = stopTimerDuration;
+            Car otherCar = other.gameObject.GetComponent<Car>();
+            // Reset the speed when the front car exits the trigger zone
+            if (otherCar != null)
+            {
+                speed = initSpeed;
+            }
         }
     }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Car"))
+        {
+            Car otherCar = other.gameObject.GetComponent<Car>();
+            Debug.Log("$Car just hit car");
+            AdjustSpeedOnCollision(otherCar);
+        }
+    }
+    void AdjustSpeedOnCollision(Car otherCar)
+    {
+        if (speed > otherCar.speed)
+        {
+         
+            speed = otherCar.speed;
+        }
+        // else if (speed < otherCar.speed)
+        // {
+        //     otherCar.speed = speed - 0.2f;
+        // }
 
+    }
     void generateWaypoint()
     {
         for(int i =1; i < path.Count-1; i++){
             addWaypoints(path[i-1],path[i],path[i+1]);//TODO: This doesn't add the last tiles waypoint add that exception
-
         }
         
     }
-     void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Car"))
-        {
-            // Adjust the position to avoid collision
-            Vector2U avoidDirection = (rb2d.position - (Vector2U)collision.transform.position).normalized;
-            rb2d.MovePosition(rb2d.position + avoidDirection * speed * Time.deltaTime);
-        }
-    }
-    
     void addWaypoints(Tile prevTile, Tile currTile, Tile nextTile){
         Vector2U cameFrom = getDirection(prevTile,currTile);
         Vector2U goingTo = getDirection(currTile,nextTile);
@@ -243,6 +271,10 @@ public class Car : MonoBehaviour{
     {
         // Debug.Log($"Spawning a car at {newPosition.x}:{newPosition.y}");
         transform.position = new Vector3U(newPosition.x, newPosition.y, transform.position.z);
+        if (spriteManager != null)
+        {
+            setSprite();
+        }
     }
     Vector3U getWaypointwithDirection(Vector2U dir, Tile tile){
         Vector3U returnPoint = new Vector3U();
@@ -297,11 +329,13 @@ public class Car : MonoBehaviour{
         {
             // Moving horizontally
             spriteRenderer.sprite = horizontalSprite;
+            boxCollider.size = new Vector2U(0.19f, 0.19f);
         }
         else
         {
             // Moving vertically
             spriteRenderer.sprite = verticalSprite;
+            boxCollider.size = new Vector2U(0.19f, 0.25f);
         }
     }
 

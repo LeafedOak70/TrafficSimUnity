@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6704417045668716299}
   - component: {fileID: 732674511355324101}
   - component: {fileID: 3903936452429101650}
-  - component: {fileID: 743937964441442826}
+  - component: {fileID: 7177344238714775467}
   m_Layer: 0
   m_Name: cars2_1
   m_TagString: Car
@@ -100,7 +100,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  initSpeed: 0
   rotationSpeed: 180
+  id: 0
   horizontalSprite: {fileID: -636595768, guid: 6d6808549b1a4eb4eaafaf3ecdca5ed6, type: 3}
   verticalSprite: {fileID: -2075073521, guid: 6d6808549b1a4eb4eaafaf3ecdca5ed6, type: 3}
   spriteManager: {fileID: 0}
@@ -109,6 +111,7 @@ MonoBehaviour:
   end: {fileID: 0}
   direction: {x: 0, y: 0, z: 0}
   waypoints: []
+  reachedDestination: 0
 --- !u!61 &3903936452429101650
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -138,7 +141,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.00005551758}
@@ -154,7 +157,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.26, y: 0.26}
   m_EdgeRadius: 0
---- !u!50 &743937964441442826
+--- !u!50 &7177344238714775467
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -166,7 +169,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 100
+  m_Mass: 10
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0

@@ -131,11 +131,16 @@ public class SpriteManager : MonoBehaviour{
             vecTopRight.x = (float)(tile.x+0.15); vecTopRight.y = (float)(tile.y+0.2);
             vecBotLeft.x = (float)(tile.x-0.15); vecBotLeft.y = (float)(tile.y-0.2);
             vecBotRight.x = (float)(tile.x+0.15); vecBotRight.y = (float)(tile.y-0.2);
-        }else if(currRoad == RoadType.LRoad || currRoad == RoadType.Four || currRoad == RoadType.TRoad){
+        }else if(currRoad == RoadType.LRoad  || currRoad == RoadType.TRoad){
             vecTopLeft.x = (float)(tile.x-0.15); vecTopLeft.y = (float)(tile.y+0.15);
             vecTopRight.x = (float)(tile.x+0.15); vecTopRight.y = (float)(tile.y+0.15);
             vecBotLeft.x = (float)(tile.x-0.15); vecBotLeft.y = (float)(tile.y-0.15);
             vecBotRight.x = (float)(tile.x+0.15); vecBotRight.y = (float)(tile.y-0.15);
+        }else if(currRoad == RoadType.Four){
+            vecTopLeft.x = (float)(tile.x-0.151); vecTopLeft.y = (float)(tile.y+0.151);
+            vecTopRight.x = (float)(tile.x+0.151); vecTopRight.y = (float)(tile.y+0.151);
+            vecBotLeft.x = (float)(tile.x-0.151); vecBotLeft.y = (float)(tile.y-0.151);
+            vecBotRight.x = (float)(tile.x+0.151); vecBotRight.y = (float)(tile.y-0.151);
         }
         tile.roadType = currRoad;
         tile.vecBottomLeft = vecBotLeft;

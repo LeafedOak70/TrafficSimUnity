@@ -219,10 +219,10 @@ public class MapGen : MonoBehaviour
                 Tile tile2 = district.tileArray[rand2];
                 Tile tile3 = district.tileArray[rand3];
                 Tile tile4 = district.tileArray[rand4];
-                Debug.Log($"Starting road monster at Urban at x:{tile1.x}, y:{tile1.y}");
-                Debug.Log($"Starting road monster at Urban at x:{tile2.x}, y:{tile2.y}");
-                Debug.Log($"Starting road monster at Urban at x:{tile3.x}, y:{tile3.y}");
-                Debug.Log($"Starting road monster at Urban at x:{tile4.x}, y:{tile4.y}");
+                // Debug.Log($"Starting road monster at Urban at x:{tile1.x}, y:{tile1.y}");
+                // Debug.Log($"Starting road monster at Urban at x:{tile2.x}, y:{tile2.y}");
+                // Debug.Log($"Starting road monster at Urban at x:{tile3.x}, y:{tile3.y}");
+                // Debug.Log($"Starting road monster at Urban at x:{tile4.x}, y:{tile4.y}");
                 roadMonster(tile1.x, tile1.y,7,7,up,district.districtType,spawnNum);
                 roadMonster(tile2.x, tile2.y,7,7,down,district.districtType,spawnNum);
                 roadMonster(tile3.x, tile3.y,7,7,left,district.districtType,spawnNum);
