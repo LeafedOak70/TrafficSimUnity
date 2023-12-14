@@ -29,7 +29,7 @@ public class Car : MonoBehaviour{
     public bool reachedDestination = false; 
     private BoxCollider2D boxCollider;
     public bool atIntersection = false;
-    // private int second = 10;
+    private int second = 5;
 
     
     
@@ -100,15 +100,22 @@ public class Car : MonoBehaviour{
             {
                 if(waypoints.Count > 1){
                     Vector3U nextWaypoint = waypoints[1];
+                    float targetWay = waypoints[0].x;
                     float wayPoint = nextWaypoint.x;
                     
                     string wayString = wayPoint.ToString();
-                    Debug.Log($"Checking {wayPoint} : {wayString}");
+                    // Debug.Log($"Checking {wayPoint} : {wayString}");
                     string[] a = wayString.Split(new char[] { '.' });
                     int decimals = a[1].Length;
-                    if(decimals == 3){
-                        Debug.Log($"{wayPoint} has 3");
-                        atIntersection = true;
+
+                    string wayString2 = targetWay.ToString();
+                    // Debug.Log($"Checking {targetWay} : {wayString2}");
+                    string[] a2 = wayString2.Split(new char[] { '.' });
+                    int decimals2 = a2[1].Length;
+
+                    if(decimals == 3 && decimals2 != 3){
+                        // Debug.Log($"{wayPoint} has 3");
+                        StartCoroutine(PauseForSeconds());
                     }
                 }
                 // Remove the reached waypoint from the list
@@ -127,8 +134,8 @@ public class Car : MonoBehaviour{
         {
             if (waypoints.Count == 0 && transform.position.x == end.x && transform.position.y == end.y)
             {
-                Debug.Log("Stopping at destination");
-                // StartCoroutine(PauseForSeconds());
+                // Debug.Log("Stopping at destination");
+                
                 reachedDestination  =true;
                 // Destroy(gameObject); // Uncomment this line to destroy the car GameObject
                 gameObject.SetActive(false); // Uncomment this line to disable the car GameObject
@@ -142,13 +149,14 @@ public class Car : MonoBehaviour{
         int decimalPointIndex = s.IndexOf('.');
         return decimalPointIndex < 0 ? 0 : s.Length - decimalPointIndex - 1;
     }
-    // IEnumerator PauseForSeconds( )
-    // {
-    //     // Pause for the specified duration
-    //     isMoving = false;
-    //     yield return new WaitForSeconds(second);
-    //     isMoving = true;
-    // }
+    IEnumerator PauseForSeconds( )
+    {
+        atIntersection = true;
+        yield return new WaitForSeconds(second);
+        speed = initSpeed;
+        atIntersection = false;
+        
+    }
     // public Tile GetTileAtPosition(Vector3U pos){
     //     foreach(Tile tile in path){
     //         foreach(Vector3U waypoint in tile.wayPoints){

@@ -79,13 +79,14 @@ public class CarSpawner : MonoBehaviour{
             float roundedNumber = Mathf.Round(randomNumber * 100f) / 100f;
             float speed = 0;
             if(roundedNumber < 0.2){
-                speed=0.5f;
+                speed=0.7f;
             }
             else if(roundedNumber < 0.7){
                 speed = 1;
             }else {
-                speed = 2;
+                speed = 1.5f;
             }
+            // speed -=0.3f;
             carComponent.speed = speed;
             carComponent.initSpeed = speed;
             carComponent.start = start;
