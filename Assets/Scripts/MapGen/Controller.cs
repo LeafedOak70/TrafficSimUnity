@@ -29,7 +29,7 @@ public class Controller : MonoBehaviour{
     public Tile[,] mapArray;
     public Camera uiCamera;
     public Camera gameCamera;
-    public Timer timer;
+    public Clock clock;
     
 
 
@@ -46,7 +46,7 @@ public class Controller : MonoBehaviour{
         gameList = mapGen.getGameTiles().Cast<Tile>().ToList();
         streetList = getStreets(gameList);
         carSpawner.populizeCity(width, height, streetList, gameList, mapArray);
-        timer.startTimer();
+        clock.startClock();
     }
     public void changeCamera(){
         uiCamera.gameObject.SetActive(false);
