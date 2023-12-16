@@ -17,8 +17,8 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
 
-        widthInputField.text = "128";
-        seedInput.text = "6";
+        widthInputField.text = "75";
+        seedInput.text = "60";
  
         generateMapButton.onClick.AddListener(GenerateMap);
         widthSlider.onValueChanged.AddListener(OnWidthValueChanged);
