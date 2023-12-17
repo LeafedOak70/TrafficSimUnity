@@ -30,9 +30,9 @@ public class Controller : MonoBehaviour{
     public Camera uiCamera;
     public Camera gameCamera;
     public Clock clock;
-    
-
-
+    public float timeLength;
+    public GameObject statUi;
+    public StatUIManager statUI;
     private void Awake(){
         streetList = new List<Street>();
         // startMap();
@@ -41,12 +41,31 @@ public class Controller : MonoBehaviour{
         width = w;
         height = h;
         seed = s;
+        timeLength = 0.3f;
         mapGen.generateMap(width, height , seed);
         mapArray = mapGen.mapTileData;
         gameList = mapGen.getGameTiles().Cast<Tile>().ToList();
         streetList = getStreets(gameList);
         carSpawner.populizeCity(width, height, streetList, gameList, mapArray);
-        clock.startClock();
+        clock.startClock(timeLength);
+    }
+    public void endofSim(){
+        carSpawner.stopAllCars();
+        statUI.setTotalCars(carSpawner.spawnedCars);
+        statUI.setTotalDistance(carSpawner.totalDrove);
+        statUI.setAvgDistance(carSpawner.totalDrove/carSpawner.spawnedCars);
+
+
+        SetChildrenActive(statUi, true);
+    }
+     private void SetChildrenActive(GameObject obj, bool active)
+    {
+        obj.SetActive(active);
+
+        foreach (Transform child in obj.transform)
+        {
+            SetChildrenActive(child.gameObject, active);
+        }
     }
     public void changeCamera(){
         uiCamera.gameObject.SetActive(false);

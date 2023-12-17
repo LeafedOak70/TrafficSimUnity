@@ -20,7 +20,11 @@ public class CarSpawner : MonoBehaviour{
     public int height;
     public Tile[,] mapTileData;
     public GameObject carPrefab;
-    int totalCar;
+    public int totalCar;
+    public int spawnedCars = 0;
+    public int totalTravel = 0;//The distance the cars were supposed to drive
+    public int totalDrove = 0;
+    public Coroutine theCouroutine;
 
 
     public void populizeCity(int width, int height,List<Street> streetL, List<Tile> gameList, Tile[,] mapArr){
@@ -32,10 +36,17 @@ public class CarSpawner : MonoBehaviour{
         generatePoolCar();
 
         SpawnCarsInstantly();
-        StartCoroutine(SpawnCarsSlowly());
+        theCouroutine = StartCoroutine(SpawnCarsSlowly());
    
 
     }
+    public void stopAllCars(){
+        foreach(GameObject car in carPool){
+            Car carScript = car.GetComponent<Car>();
+            carScript.pause = true;
+        }
+    }
+    
 
     public void generatePoolCar(){
         totalCar = 0;
@@ -55,6 +66,7 @@ public class CarSpawner : MonoBehaviour{
         }
     }
     public void spawnCar(Tile start, Tile end, List <Tile> streetArr){
+        spawnedCars++;
         foreach(Tile tile in gameList){
             if(tile.x == start.x && tile.y == start.y){
                 // Debug.Log($"Start waypoint {tile.vecTopLeft.x}:{tile.vecTopLeft.y}");

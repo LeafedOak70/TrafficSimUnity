@@ -3,7 +3,7 @@ using TMPro;
 
 public class Clock : MonoBehaviour
 {
-    public int startHour = 6;
+    public int startHour = 8;
     public int minutesPerDay = 24 * 60; // 24 hours * 60 minutes
     public TMP_Text timerText;
 
@@ -11,26 +11,36 @@ public class Clock : MonoBehaviour
     public Controller controller;
 
     private float currentTime;
-
-    public void startClock()
+    public float maxHours;
+    private bool hasEndedSim = false;
+    public void startClock(float hours)
     {
+        maxHours = hours;
         currentTime = (float)startHour * 60f;
         UpdateTimerDisplay();
     }
 
     private void Update()
+{
+    if (!hasEndedSim && currentTime < (maxHours * 60f) + (startHour * 60f))
     {
-        
-            currentTime += Time.deltaTime;
+        currentTime += Time.deltaTime;
 
-            if (currentTime >= minutesPerDay)
-            {
-                // A new day starts
-                currentTime = 0f;
-            }
+        if (currentTime >= minutesPerDay)
+        {
+            // A new day starts
+            currentTime = 0f;
+        }
 
-            UpdateTimerDisplay();
+        UpdateTimerDisplay();
     }
+    else if (!hasEndedSim)
+    {
+        // This block will execute only once when currentTime exceeds the limit
+        hasEndedSim = true;
+        controller.endofSim();
+    }
+}
     
 
     void UpdateTimerDisplay()

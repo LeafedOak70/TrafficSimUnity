@@ -30,12 +30,17 @@ public class Car : MonoBehaviour{
     private BoxCollider2D boxCollider;
     public bool atIntersection = false;
     private int second = 5;
-
-    
+    public float startTime;
+    public float elapsedTime;
+    public bool pause = false;
+    public int routeTotal;
+    public int routeDrove;
+    public CarSpawner carSpawner;
     
     private void Awake(){
+        carSpawner = FindObjectOfType<CarSpawner>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sortingOrder = 10000;
+        spriteRenderer.sortingOrder = 1;
         boxCollider = GetComponent<BoxCollider2D>();
         boxCollider.isTrigger = true;
         
@@ -45,14 +50,21 @@ public class Car : MonoBehaviour{
     void Update(){
         if(isMoving){
             // speed = initSpeed;
+            if(pause){
+                speed = 0;
+                carSpawner.totalDrove += waypoints.Count();
+                routeDrove = waypoints.Count();
+            }
             if(atIntersection){
                 speed = 0;
             }else{
                 MoveToDestination();
             }
             
+            
         }else if(!isMoving){
-
+            carSpawner.totalDrove += routeTotal; 
+            routeDrove = routeTotal;
             StartCoroutine(Die());
             // if(reachedDestination){
             //     gameObject.SetActive(false);
@@ -68,7 +80,10 @@ public class Car : MonoBehaviour{
         Vector3U spawnPoint = getWaypointwithDirection(dir, start);
         SetInitialPosition(spawnPoint);
         generateWaypoint();
+        startTime = Time.time;
+        routeTotal = waypoints.Count();
         isMoving = true;
+        carSpawner.totalTravel += waypoints.Count();
     }
     void MoveToDestination()
     {
@@ -78,17 +93,6 @@ public class Car : MonoBehaviour{
             Vector3U targetWaypoint = waypoints[0];
             Vector3U currentPosition = transform.position;
             
-            // Tile currentTile = GetTileAtPosition(currentPosition);
-            // Tile nextTile = GetTileAtPosition(targetWaypoint);
-            // if(currentTile != null && nextTile != null){
-            //     if(currentTile.tiletype == TileType.Road && nextTile.tiletype == TileType.Road){
-            //         if(currentTile.roadType != RoadType.Four && nextTile.roadType == RoadType.Four){
-            //             Debug.Log($"Stopping before intersection : {gameObject.name}");
-            //             StartCoroutine(PauseForSeconds());
-            //         }
-            //     }
-            // }
-
             // Calculate the direction and distance to the target waypoint
             Vector3U directionToWaypoint = (targetWaypoint - currentPosition).normalized;
             float distanceToWaypoint = Vector3U.Distance(currentPosition, targetWaypoint);
@@ -103,7 +107,7 @@ public class Car : MonoBehaviour{
                     Vector3U nextWaypoint = waypoints[1];
                     float targetWay = waypoints[0].x;
                     float wayPoint = nextWaypoint.x;
-                    
+                    elapsedTime = Time.time - startTime;
                     string wayString = wayPoint.ToString();
                     // Debug.Log($"Checking {wayPoint} : {wayString}");
                     string[] a = wayString.Split(new char[] { '.' });
@@ -136,7 +140,7 @@ public class Car : MonoBehaviour{
             if (waypoints.Count == 0 && transform.position.x == end.x && transform.position.y == end.y)
             {
                 // Debug.Log("Stopping at destination");
-                
+                elapsedTime = Time.time - startTime;
                 reachedDestination  =true;
                 // Destroy(gameObject); // Uncomment this line to destroy the car GameObject
                 gameObject.SetActive(false); // Uncomment this line to disable the car GameObject
@@ -191,7 +195,7 @@ public class Car : MonoBehaviour{
         if (other.CompareTag("Car"))
         {
             Car otherCar = other.gameObject.GetComponent<Car>();
-            Debug.Log("$Car just hit car");
+            // Debug.Log("$Car just hit car");
             AdjustSpeedOnCollision(otherCar);
         }
     }
