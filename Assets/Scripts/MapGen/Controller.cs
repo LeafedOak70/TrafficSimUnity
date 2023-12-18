@@ -31,7 +31,7 @@ public class Controller : MonoBehaviour{
     public Camera gameCamera;
     public Clock clock;
     public float timeLength;
-    public GameObject statUi;
+    public GameObject statGroup;
     public StatUIManager statUI;
     private void Awake(){
         streetList = new List<Street>();
@@ -56,9 +56,10 @@ public class Controller : MonoBehaviour{
         
 
 
-        SetChildrenActive(statUi, true);
+        SetChildrenActive(statGroup, true);
+        SetChildrenActive(statUI.totalStats, true);
     }
-     private void SetChildrenActive(GameObject obj, bool active)
+    private void SetChildrenActive(GameObject obj, bool active)
     {
         obj.SetActive(active);
 

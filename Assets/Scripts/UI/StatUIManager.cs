@@ -13,6 +13,8 @@ public class StatUIManager : MonoBehaviour
     public TMP_Text totalAvgTraffic;
     public bool start = false;
     public CarSpawner carSpawner;
+    public GameObject avgStats;
+    public GameObject totalStats;
     void Awake(){
 
     }
@@ -27,6 +29,18 @@ public class StatUIManager : MonoBehaviour
             setTotalAvgTime(carSpawner.totalTime/carSpawner.spawnedCars);
             setTotalAvgTraffic(carSpawner.totalTraffic/carSpawner.spawnedCars);
             setTotalAvgDriving((carSpawner.totalTime-carSpawner.totalTraffic)/carSpawner.spawnedCars);
+        }
+    }
+    public void showTotals(){
+        SetChildrenActive(totalStats, true);
+    }
+    private void SetChildrenActive(GameObject obj, bool active)
+    {
+        obj.SetActive(active);
+
+        foreach (Transform child in obj.transform)
+        {
+            SetChildrenActive(child.gameObject, active);
         }
     }
     public void setTotalCars(int num){
