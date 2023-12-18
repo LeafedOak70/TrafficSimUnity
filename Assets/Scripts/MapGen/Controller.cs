@@ -37,11 +37,11 @@ public class Controller : MonoBehaviour{
         streetList = new List<Street>();
         // startMap();
     }
-    public void startMap(int w, int h, int s){
+    public void startMap(int w, int h, int s, int t){
         width = w;
         height = h;
         seed = s;
-        timeLength = 0.3f;
+        timeLength = t;
         mapGen.generateMap(width, height , seed);
         mapArray = mapGen.mapTileData;
         gameList = mapGen.getGameTiles().Cast<Tile>().ToList();

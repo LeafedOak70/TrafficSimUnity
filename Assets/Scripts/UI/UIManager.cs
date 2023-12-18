@@ -6,7 +6,7 @@ public class UIManager : MonoBehaviour
     public TMP_InputField widthInputField;
     public Slider widthSlider;
     public TMP_InputField seedInput;
-
+    public TMP_InputField runTimeInput;
     public Slider seedSlider;
     public Button generateMapButton;
     public Button districtToggle;
@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
 
         widthInputField.text = "75";
         seedInput.text = "60";
+        runTimeInput.text = "1";
  
         generateMapButton.onClick.AddListener(GenerateMap);
         widthSlider.onValueChanged.AddListener(OnWidthValueChanged);
@@ -74,13 +75,14 @@ public class UIManager : MonoBehaviour
         int width = int.Parse(widthInputField.text);
         int height = width;
         int seed = int.Parse(seedInput.text);
+        int time = int.Parse(runTimeInput.text);
 
         // Assuming the Controller script is still present, you can access its methods
         Controller controller = FindObjectOfType<Controller>();
 
         if (controller != null)
         {
-            controller.startMap(width, height, seed);
+            controller.startMap(width, height, seed, time);
         }
         controller.changeCamera();
 
