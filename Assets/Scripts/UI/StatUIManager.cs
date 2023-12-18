@@ -11,12 +11,15 @@ public class StatUIManager : MonoBehaviour
     public TMP_Text totalAvgTime;
     public TMP_Text totalAvgDriving;
     public TMP_Text totalAvgTraffic;
+    public Button totalButton;
+    public Button avgButton;
     public bool start = false;
     public CarSpawner carSpawner;
     public GameObject avgStats;
     public GameObject totalStats;
     void Awake(){
-
+        totalButton.onClick.AddListener(showTotals);
+        avgButton.onClick.AddListener(showAvg);
     }
     void Update(){
         if(start){
@@ -31,7 +34,12 @@ public class StatUIManager : MonoBehaviour
             setTotalAvgDriving((carSpawner.totalTime-carSpawner.totalTraffic)/carSpawner.spawnedCars);
         }
     }
+    public void showAvg(){
+        SetChildrenActive(avgStats,true);
+        SetChildrenActive(totalStats, false);
+    }
     public void showTotals(){
+        SetChildrenActive(avgStats,false);
         SetChildrenActive(totalStats, true);
     }
     private void SetChildrenActive(GameObject obj, bool active)

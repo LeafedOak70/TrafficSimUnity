@@ -57,7 +57,7 @@ public class Controller : MonoBehaviour{
 
 
         SetChildrenActive(statGroup, true);
-        SetChildrenActive(statUI.totalStats, true);
+        statUI.showAvg();
     }
     private void SetChildrenActive(GameObject obj, bool active)
     {
