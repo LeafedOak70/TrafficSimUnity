@@ -24,6 +24,8 @@ public class CarSpawner : MonoBehaviour{
     public int spawnedCars = 0;
     public int totalTravel = 0;//The distance the cars were supposed to drive
     public int totalDrove = 0;
+    public int totalTime = 0;
+    public int totalTraffic = 0;
     public Coroutine theCouroutine;
 
 
@@ -41,6 +43,7 @@ public class CarSpawner : MonoBehaviour{
 
     }
     public void stopAllCars(){
+        StopCoroutine(theCouroutine);
         foreach(GameObject car in carPool){
             Car carScript = car.GetComponent<Car>();
             carScript.pause = true;
@@ -127,8 +130,8 @@ public class CarSpawner : MonoBehaviour{
             {
                 if (street.biruArray.Count > 10)
                 {
-                    int carNum = Mathf.CeilToInt(street.biruArray.Count / 10.0f);
-                    for (int i = 0; i < 500; i++)
+                    int carNum = Mathf.CeilToInt(street.biruArray.Count / 2);
+                    for (int i = 0; i < carNum; i++)
                     {
                         Tile spawnTile = getSpawn(street);
                         Tile targetTile = getTarget(street, spawnTile);
@@ -144,7 +147,7 @@ public class CarSpawner : MonoBehaviour{
         
         foreach(Street street in streetList){
             if(street.biruArray.Count > 10){
-                int carNum = Mathf.CeilToInt(street.biruArray.Count / 10.0f);
+                int carNum = Mathf.CeilToInt(street.biruArray.Count);
                 for(int i = 0; i < carNum; i++){
                     Tile spawnTile = getSpawn(street);
                     Tile targetTile = getTarget(street,spawnTile);

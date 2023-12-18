@@ -51,9 +51,9 @@ public class Controller : MonoBehaviour{
     }
     public void endofSim(){
         carSpawner.stopAllCars();
-        statUI.setTotalCars(carSpawner.spawnedCars);
-        statUI.setTotalDistance(carSpawner.totalDrove);
-        statUI.setAvgDistance(carSpawner.totalDrove/carSpawner.spawnedCars);
+        statUI.start = true;
+        
+        
 
 
         SetChildrenActive(statUi, true);

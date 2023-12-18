@@ -33,9 +33,12 @@ public class Car : MonoBehaviour{
     public float startTime;
     public float elapsedTime;
     public bool pause = false;
+    public float timeTraffic = 1;
     public int routeTotal;
     public int routeDrove;
     public CarSpawner carSpawner;
+    public bool sentInfo = false;
+    public int distanceLeft;
     
     private void Awake(){
         carSpawner = FindObjectOfType<CarSpawner>();
@@ -52,9 +55,18 @@ public class Car : MonoBehaviour{
             // speed = initSpeed;
             if(pause){
                 speed = 0;
-                carSpawner.totalDrove += waypoints.Count();
                 routeDrove = waypoints.Count();
+                if(!sentInfo){
+                    carSpawner.totalDrove += routeTotal - distanceLeft;
+                    carSpawner.totalTime += (int)elapsedTime;
+                    carSpawner.totalTraffic += (int)timeTraffic;
+                    carSpawner.totalTravel += routeTotal;
+                    sentInfo = true;
+                }
             }
+            // if(!pause && speed == 0){
+
+            // }
             if(atIntersection){
                 speed = 0;
             }else{
@@ -63,7 +75,6 @@ public class Car : MonoBehaviour{
             
             
         }else if(!isMoving){
-            carSpawner.totalDrove += routeTotal; 
             routeDrove = routeTotal;
             StartCoroutine(Die());
             // if(reachedDestination){
@@ -83,7 +94,7 @@ public class Car : MonoBehaviour{
         startTime = Time.time;
         routeTotal = waypoints.Count();
         isMoving = true;
-        carSpawner.totalTravel += waypoints.Count();
+        
     }
     void MoveToDestination()
     {
@@ -125,7 +136,7 @@ public class Car : MonoBehaviour{
                 }
                 // Remove the reached waypoint from the list
                 waypoints.RemoveAt(0);
-
+                distanceLeft++;
                 // Update the sprite based on the next movement
                 if (waypoints.Count > 0)
                 {
@@ -162,6 +173,7 @@ public class Car : MonoBehaviour{
     IEnumerator PauseForSeconds( )
     {
         atIntersection = true;
+        timeTraffic += second;
         yield return new WaitForSeconds(second);
         speed = initSpeed;
         atIntersection = false;
