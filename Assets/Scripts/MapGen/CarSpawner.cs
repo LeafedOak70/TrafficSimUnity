@@ -33,8 +33,8 @@ public class CarSpawner : MonoBehaviour{
 
 
     public void populizeCity(int width, int height,List<Street> streetL, List<Tile> gameList, Tile[,] mapArr, int rateNum){
-        rateBuilding = new int[]{2,5,10};
-        rateSpawn = new int[]{1,3,5};
+        rateBuilding = new int[]{2,5,10};//A car per # building : This is for when we instantly spawn a fuck ton of cars 
+        rateSpawn = new int[]{1,3,5};//Every # seconds we spawn one car fresh into the world
         this.width = width;
         this.height = height;
         this.streetList = streetL;
