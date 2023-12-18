@@ -37,7 +37,7 @@ public class Controller : MonoBehaviour{
         streetList = new List<Street>();
         // startMap();
     }
-    public void startMap(int w, int h, int s, int t){
+    public void startMap(int w, int h, int s, int t, int rate){
         width = w;
         height = h;
         seed = s;
@@ -46,7 +46,8 @@ public class Controller : MonoBehaviour{
         mapArray = mapGen.mapTileData;
         gameList = mapGen.getGameTiles().Cast<Tile>().ToList();
         streetList = getStreets(gameList);
-        carSpawner.populizeCity(width, height, streetList, gameList, mapArray);
+
+        carSpawner.populizeCity(width, height, streetList, gameList, mapArray, rate);
         clock.startClock(timeLength);
     }
     public void endofSim(){

@@ -27,14 +27,20 @@ public class CarSpawner : MonoBehaviour{
     public int totalTime = 0;
     public int totalTraffic = 0;
     public Coroutine theCouroutine;
+    public int rate;
+    int[] rateBuilding;
+    int[] rateSpawn;
 
 
-    public void populizeCity(int width, int height,List<Street> streetL, List<Tile> gameList, Tile[,] mapArr){
+    public void populizeCity(int width, int height,List<Street> streetL, List<Tile> gameList, Tile[,] mapArr, int rateNum){
+        rateBuilding = new int[]{2,5,10};
+        rateSpawn = new int[]{1,3,5};
         this.width = width;
         this.height = height;
         this.streetList = streetL;
         this.gameList = gameList;
         mapTileData = mapArr;
+        rate = rateNum;
         generatePoolCar();
 
         SpawnCarsInstantly();
@@ -55,12 +61,12 @@ public class CarSpawner : MonoBehaviour{
         totalCar = 0;
          foreach(Street street in streetList){
             if(street.biruArray.Count > 10){
-                int carNum = Mathf.CeilToInt(street.biruArray.Count / 10.0f);
+                int carNum = Mathf.CeilToInt(street.biruArray.Count / rateBuilding[rate]);
                 totalCar += carNum;
               
             }
         }
-        totalCar += 1200;
+        totalCar += 2000;
         for(int i = 0; i < totalCar; i++){
             GameObject carObject = Instantiate(carPrefab, Vector3U.zero, QuaternionU.identity);
             carObject.name = "Car "+ i;
@@ -130,7 +136,7 @@ public class CarSpawner : MonoBehaviour{
             {
                 if (street.biruArray.Count > 10)
                 {
-                    int carNum = Mathf.CeilToInt(street.biruArray.Count / 2);
+                    int carNum = Mathf.CeilToInt(street.biruArray.Count / rateBuilding[rate]);
                     for (int i = 0; i < carNum; i++)
                     {
                         Tile spawnTile = getSpawn(street);
@@ -154,7 +160,7 @@ public class CarSpawner : MonoBehaviour{
                     // Debug.Log($"Got two points at street:{spawnTile.streetId},{targetTile.streetId}");
                     // Debug.Log($"Points are at x:{spawnTile.x}, y:{spawnTile.y} and x:{targetTile.x}, y:{targetTile.y}");
                     spawnCar(spawnTile, targetTile, street.streetArray);
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(rateSpawn[rate]);
                 }
             }
         }

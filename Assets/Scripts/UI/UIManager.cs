@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     public Slider seedSlider;
     public Button generateMapButton;
     public Button districtToggle;
+    public TMP_Dropdown spawnDrop;
     private PerlinNoiseGenerator perlin;
     private bool districtBool = true;
     
@@ -76,13 +77,14 @@ public class UIManager : MonoBehaviour
         int height = width;
         int seed = int.Parse(seedInput.text);
         int time = int.Parse(runTimeInput.text);
+        int spawnRate = spawnDrop.value;
 
         // Assuming the Controller script is still present, you can access its methods
         Controller controller = FindObjectOfType<Controller>();
 
         if (controller != null)
         {
-            controller.startMap(width, height, seed, time);
+            controller.startMap(width, height, seed, time, spawnRate);
         }
         controller.changeCamera();
 
