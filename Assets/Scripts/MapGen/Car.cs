@@ -363,13 +363,13 @@ public class Car : MonoBehaviour{
         {
             // Moving horizontally
             spriteRenderer.sprite = horizontalSprite;
-            boxCollider.size = new Vector2U(0.19f, 0.19f);
+            boxCollider.size = new Vector2U(0.25f, 0.19f);
         }
         else
         {
             // Moving vertically
             spriteRenderer.sprite = verticalSprite;
-            boxCollider.size = new Vector2U(0.19f, 0.25f);
+            boxCollider.size = new Vector2U(0.19f, 0.3f);
         }
     }
 

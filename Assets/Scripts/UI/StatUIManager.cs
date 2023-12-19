@@ -55,33 +55,33 @@ public class StatUIManager : MonoBehaviour
         totalCars.text = num.ToString();
     }
     public void setTotalDistance(int num){
-        totalDistance.text = num.ToString();
+        totalDistance.text = num.ToString()+"m";
     }
     public void setAvgDistance(int num){
-        totalAvgDistance.text = num.ToString();
+        totalAvgDistance.text = num.ToString()+"m";
     }
      public void setTotalTime(int num)
     {
-        totalTime.text = num.ToString()+"m";
+        totalTime.text = num.ToString()+"min";
     }
 
     public void setTotalTrafficTime(int num)
     {
-        totalTrafficTime.text = num.ToString()+"m";
+        totalTrafficTime.text = num.ToString()+"min";
     }
 
     public void setTotalAvgTraffic(int num)
     {
-        totalAvgTraffic.text = num.ToString()+"m";
+        totalAvgTraffic.text = num.ToString()+"min";
     }
     public void setTotalAvgTime(int num)
     {
-        totalAvgTime.text = num.ToString()+"m";
+        totalAvgTime.text = num.ToString()+"min";
     }
 
     public void setTotalAvgDriving(int num)
     {
-        totalAvgDriving.text = num.ToString()+"m";
+        totalAvgDriving.text = num.ToString()+"min";
     }
   
 }
