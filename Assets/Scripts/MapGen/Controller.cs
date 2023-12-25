@@ -33,15 +33,17 @@ public class Controller : MonoBehaviour{
     public float timeLength;
     public GameObject statGroup;
     public StatUIManager statUI;
+    public int rate;
     private void Awake(){
         streetList = new List<Street>();
         // startMap();
     }
-    public void startMap(int w, int h, int s, int t, int rate){
+    public void startMap(int w, int h, int s, int t, int r){
         width = w;
         height = h;
         seed = s;
         timeLength = t;
+        rate = r;
         mapGen.generateMap(width, height , seed);
         mapArray = mapGen.mapTileData;
         gameList = mapGen.getGameTiles().Cast<Tile>().ToList();
@@ -53,10 +55,12 @@ public class Controller : MonoBehaviour{
     public void endofSim(){
         carSpawner.stopAllCars();
         statUI.start = true;
+        statUI.ogRate = rate;
         
-        
-
-
+        if(rate == 2){statUI.currentRate = "low";}
+        else if(rate == 1){statUI.currentRate = "mid";}
+        else if(rate == 0){statUI.currentRate = "high";}
+        statUI.setRealStats();
         SetChildrenActive(statGroup, true);
         statUI.showAvg();
     }
